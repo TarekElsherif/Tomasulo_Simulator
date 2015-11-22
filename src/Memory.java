@@ -1,4 +1,44 @@
 
-public class Memory {
+public class Memory
+{
+	private int levels;
+	private Cache[] memory;
+	
+	public Memory(int s, int l, int m)
+	{
+		setLevels(1);
+		setMemory(new Cache[] {new Cache (s, l, m)});	
+	}
+	
+	public Memory(int s1, int l1, int m1, int s2, int l2, int m2)
+	{
+		setLevels(2);
+		setMemory(new Cache[] {new Cache (s1, l1, m1), new Cache (s2, l2, m2)});	
+	}
+	
+	public Memory(int s1, int l1, int m1, int s2, int l2, int m2, int s3, int l3, int m3)
+	{
+		setLevels(3);
+		setMemory(new Cache[] {new Cache (s1, l1, m1), new Cache (s2, l2, m2), new Cache (s3, l3, m3)});
+	}
 
+	public int getLevels()
+	{
+		return levels;
+	}
+
+	public void setLevels(int levels)
+	{
+		this.levels = levels;
+	}
+
+	public Cache[] getMemory()
+	{
+		return memory;
+	}
+
+	public void setMemory(Cache[] memory)
+	{
+		this.memory = memory;
+	}
 }
