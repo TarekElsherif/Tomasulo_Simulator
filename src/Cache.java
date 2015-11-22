@@ -1,18 +1,24 @@
-import java.lang.reflect.Constructor;
+
 
 public class Cache {
 	// Cache inputs
 	private int sizeOfCache; //S
-	private int numberOfLines; //C
-	private int lengthOfLine; //L
+	private int numberOfBlocks; //C
+	private int sizeOfBlock; //L
+	private int mSets; // M
 	// Cache variables (varies from Cache type to another)
 	private int index;
 	private int offset;
 	
+	//TODO : Check if the inserted values are in Bytes (Multiple of 8)
+	
 	public Cache (int s, int l, int m) {
 		sizeOfCache = s;
-		lengthOfLine = l;
-		numberOfLines = sizeOfCache/lengthOfLine;
+		sizeOfBlock = l;
+		mSets = m;
+		numberOfBlocks = sizeOfCache/sizeOfBlock;
+		
+		
 	}
 	
 	public int getSize() {
@@ -21,17 +27,17 @@ public class Cache {
 	public void setSize(int sizeOfCache) {
 		this.sizeOfCache = sizeOfCache;
 	}
-	public int getNumberOfLines() {
-		return numberOfLines;
+	public int getnumberOfBlocks() {
+		return numberOfBlocks;
 	}
-	public void setNumberOfLines(int numberOfLines) {
-		this.numberOfLines = numberOfLines;
+	public void setnumberOfBlocks(int numberOfBlocks) {
+		this.numberOfBlocks = numberOfBlocks;
 	}
-	public int getLengthOfLine() {
-		return lengthOfLine;
+	public int getsizeOfBlock() {
+		return sizeOfBlock;
 	}
-	public void setLengthOfLine(int lengthOfLine) {
-		this.lengthOfLine = lengthOfLine;
+	public void setsizeOfBlock(int sizeOfBlock) {
+		this.sizeOfBlock = sizeOfBlock;
 	}
 
 	public int getIndex() {
@@ -48,5 +54,13 @@ public class Cache {
 
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+
+	public int getmSets() {
+		return mSets;
+	}
+
+	public void setmSets(int mSets) {
+		this.mSets = mSets;
 	}
 }
