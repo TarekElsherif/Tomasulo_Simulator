@@ -7,17 +7,16 @@ public class Cache
 	private int sizeOfBlock; // L
 	private int mSets; // M
 	private Block[][] blocks;
-	private int accessDataCycles;
+	private int accessDataCycles; // Access Time in Cycles
 	private boolean writePolicyHit;  //True (Write Back) & False (Write Through)
 	private boolean writePolicyMiss; //True (Write Back) & False (Write Through)
-	private int accessTime; // Access Time in Cycles
 	// Cache variables (varies from Cache type to another)
 	private int index;
 	private int offset;
 
 	// TODO : Check if the inserted values are in Bytes (Multiple of 8)
 
-	public Cache(int s, int l, int m, boolean WPH, boolean WPM, int acessTime)
+	public Cache(int s, int l, int m, boolean WPH, boolean WPM, int accessTime)
 	{
 		sizeOfCache = s;
 		sizeOfBlock = l;
@@ -27,6 +26,7 @@ public class Cache
 		setBlocks(new Block[noCol][mSets]);
 		writePolicyHit = WPH;
 		writePolicyMiss = WPM;
+		accessDataCycles = accessTime;
 	}
 
 	public int getSize()
@@ -166,15 +166,5 @@ public class Cache
 	public void setWritePolicyMiss(boolean writePolicyMiss)
 	{
 		this.writePolicyMiss = writePolicyMiss;
-	}
-
-	public int getAccessTime()
-	{
-		return accessTime;
-	}
-
-	public void setAccessTime(int accessTime)
-	{
-		this.accessTime = accessTime;
 	}
 }
