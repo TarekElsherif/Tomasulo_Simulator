@@ -34,6 +34,7 @@ public class execute {
 			
 		
 		}
+		//AbdoPart
 		if(ins.getOperation().equalsIgnoreCase("jmp")){
 			RegisterFile.setRegister(ins.getRegA(), (RegisterFile.getRegister(ins.getRegA()))+ins.getImm());
 			//PC+=1+RegisterFile.getRegister(ins.getRegA());
