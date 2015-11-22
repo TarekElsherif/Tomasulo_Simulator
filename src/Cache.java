@@ -7,13 +7,17 @@ public class Cache
 	private int sizeOfBlock; // L
 	private int mSets; // M
 	private Block[][] blocks;
+	private int accessDataCycles;
+	private boolean writePolicyHit;  //True (Write Back) & False (Write Through)
+	private boolean writePolicyMiss; //True (Write Back) & False (Write Through)
+	private int accessTime; // Access Time in Cycles
 	// Cache variables (varies from Cache type to another)
 	private int index;
 	private int offset;
 
 	// TODO : Check if the inserted values are in Bytes (Multiple of 8)
 
-	public Cache(int s, int l, int m)
+	public Cache(int s, int l, int m, boolean WPH, boolean WPM, int acessTime)
 	{
 		sizeOfCache = s;
 		sizeOfBlock = l;
@@ -21,6 +25,8 @@ public class Cache
 		numberOfBlocks = sizeOfCache / sizeOfBlock;
 		int noCol = numberOfBlocks / mSets;
 		setBlocks(new Block[noCol][mSets]);
+		writePolicyHit = WPH;
+		writePolicyMiss = WPM;
 	}
 
 	public int getSize()
@@ -130,5 +136,45 @@ public class Cache
 			System.out.println("Block Size not Compatible - Cache Class");
 		}
 
+	}
+
+	public int getAccessDataCycles()
+	{
+		return accessDataCycles;
+	}
+
+	public void setAccessDataCycles(int accessDataCycles)
+	{
+		this.accessDataCycles = accessDataCycles;
+	}
+
+	public boolean isWritePolicyHit()
+	{
+		return writePolicyHit;
+	}
+
+	public void setWritePolicyHit(boolean writePolicyHit)
+	{
+		this.writePolicyHit = writePolicyHit;
+	}
+
+	public boolean isWritePolicyMiss()
+	{
+		return writePolicyMiss;
+	}
+
+	public void setWritePolicyMiss(boolean writePolicyMiss)
+	{
+		this.writePolicyMiss = writePolicyMiss;
+	}
+
+	public int getAccessTime()
+	{
+		return accessTime;
+	}
+
+	public void setAccessTime(int accessTime)
+	{
+		this.accessTime = accessTime;
 	}
 }
