@@ -1,16 +1,26 @@
 
-public class Byte {
+public class Byte
+{
 	int data;
-	
-	public Byte() {
+
+	public Byte()
+	{
 		data = 0;
 	}
-	
-	public int getData() {
+
+	public int getData()
+	{
 		return data;
 	}
 
-	public void setData(int data) {
-		this.data = data;
+	public void setData(int data)
+	{
+		if (data < 127 && data > -128)
+		{
+			this.data = data;
+		} else
+		{
+			System.out.println("Data input out of range - Byte Class");
+		}
 	}
 }

@@ -1,11 +1,13 @@
-public class Block {
+public class Block
+{
 	private boolean valid;
 	private boolean dirty;
 	private int tag;
 	private int size;
 	private Byte[] block;
-	
-	public Block(int sizeOfBlock) {
+
+	public Block(int sizeOfBlock)
+	{
 		size = sizeOfBlock;
 		valid = false;
 		dirty = false;
@@ -13,52 +15,64 @@ public class Block {
 		setBlock(new Byte[size]);
 	}
 
-	public boolean isValid() {
+	public boolean isValid()
+	{
 		return valid;
 	}
 
-	public void setValid(boolean valid) {
+	public void setValid(boolean valid)
+	{
 		this.valid = valid;
 	}
 
-	public boolean isDirty() {
+	public boolean isDirty()
+	{
 		return dirty;
 	}
 
-	public void setDirty(boolean dirty) {
+	public void setDirty(boolean dirty)
+	{
 		this.dirty = dirty;
 	}
 
-	public int getTag() {
+	public int getTag()
+	{
 		return tag;
 	}
 
-	public void setTag(int tag) {
+	public void setTag(int tag)
+	{
 		this.tag = tag;
 	}
 
-	public int getsize() {
+	public int getsize()
+	{
 		return size;
 	}
 
-	public void setsize(int size) {
+	public void setsize(int size)
+	{
 		this.size = size;
 	}
 
-	//Get a Certain Byte
-	public Byte getByte(int offset) {
+	// Get a Certain Byte
+	public Byte getByte(int offset)
+	{
 		return block[offset];
 	}
 
-	public void setByte(int offset, int input) {
+	public void setByte(int offset, int input)
+	{
 		this.block[offset].setData(input);
 	}
 
-	public Byte[] getBlock() {
+	public Byte[] getBlock()
+	{
 		return block;
 	}
 
-	public void setBlock(Byte[] block) {
+	public void setBlock(Byte[] block)
+	{
 		this.block = block;
 	}
 }
