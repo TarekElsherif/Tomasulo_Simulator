@@ -1,5 +1,6 @@
 public class RegisterFile
 {
+<<<<<<< HEAD
 	final private static int reg0 = 0;
 	private static int reg1;
 	private static int reg2;
@@ -10,6 +11,18 @@ public class RegisterFile
 	private static int reg7;
 
 	public static void setRegister(int regNum, int data)
+=======
+	final private int reg0 = 0;
+	private int reg1;
+	private int reg2;
+	private int reg3;
+	private int reg4;
+	private int reg5;
+	private int reg6;
+	private int reg7;
+
+	public void setRegister(int regNum, int data)
+>>>>>>> origin/master
 	{
 		if (regNum < 1 || regNum > 7)
 		{
@@ -53,7 +66,11 @@ public class RegisterFile
 	}
 
 	@SuppressWarnings("null")
+<<<<<<< HEAD
 	public static int getRegister(int regNum)
+=======
+	public int getRegister(int regNum)
+>>>>>>> origin/master
 	{
 		if (regNum < 0 || regNum > 7)
 		{
