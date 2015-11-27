@@ -124,7 +124,7 @@ public class Cache
 				{
 					for (int j = 0; j < bytes.length; j++)
 					{
-						blocks[index][i].setByte(j, bytes[j].getData());
+						blocks[index][i].setByte(j, bytes[j]);
 					}
 					found = true;	
 				}
@@ -166,5 +166,37 @@ public class Cache
 	public void setWritePolicyMiss(boolean writePolicyMiss)
 	{
 		this.writePolicyMiss = writePolicyMiss;
+	}
+	
+	public String toString()
+	{
+		String output = "[V]..[D]..[T]..[Data]\n";
+		
+		for (int i = 0; i < blocks.length; i++)
+		{
+			for (int j = 0; j < blocks[i].length; j++)
+			{
+				output += blocks[i][j] + "\n";
+			}
+		}
+		return output;
+	}
+	
+	public static void main(String[] args)
+	{
+		Byte test = new Byte();
+		test.setData(127);
+		
+		Block tstBlck = new Block(4);
+		tstBlck.setByte(0, test);
+		tstBlck.setByte(1,  new Byte(127));
+		tstBlck.setValid(true);
+		tstBlck.setDirty(false);
+		tstBlck.setTag(6);
+		
+		Cache cacheTst = new Cache(16, 4, 1, true, true, 20);
+		cacheTst.setBlock(6, 2, tstBlck.getBlock());
+		
+		System.out.println(cacheTst);
 	}
 }
