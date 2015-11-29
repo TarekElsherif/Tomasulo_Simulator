@@ -47,4 +47,6 @@ public class Memory
 	{
 		this.memory = memory;
 	}
+	
+	
 }
