@@ -23,10 +23,14 @@ public class Cache
 		mSets = m;
 		numberOfBlocks = sizeOfCache / sizeOfBlock;
 		int noCol = numberOfBlocks / mSets;
-		setBlocks(new Block[noCol][mSets]);
 		writePolicyHit = WPH;
 		writePolicyMiss = WPM;
 		accessDataCycles = accessTime;
+
+		setBlocks(new Block[noCol][mSets]);	
+		for (int i = 0; i < blocks.length; i++)
+			for (int j = 0; j < blocks[i].length; j++)
+				blocks[i][j] = new Block(sizeOfBlock);
 	}
 
 	public int getSize()
@@ -116,7 +120,7 @@ public class Cache
 	{
 		boolean found = false;
 		
-		if (sizeOfBlock == bytes.length + 1)
+		if (sizeOfBlock == bytes.length)
 		{
 			for (int i = 0; i < blocks[index].length; i++)
 			{
@@ -170,15 +174,12 @@ public class Cache
 	
 	public String toString()
 	{
-		String output = "[V]..[D]..[T]..[Data]\n";
+		String output = "[V] [D] [T]   [Data]\n";
 		
 		for (int i = 0; i < blocks.length; i++)
-		{
 			for (int j = 0; j < blocks[i].length; j++)
-			{
 				output += blocks[i][j] + "\n";
-			}
-		}
+				
 		return output;
 	}
 	
