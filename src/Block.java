@@ -12,7 +12,10 @@ public class Block
 		valid = false;
 		dirty = false;
 		tag = 0;
-		setBlock(new Byte[size]);
+		block = new Byte[size];
+		
+		for (int i = 0; i < block.length; i++)
+			block[i] = new Byte();
 	}
 
 	public boolean isValid()
@@ -61,9 +64,9 @@ public class Block
 		return block[offset];
 	}
 
-	public void setByte(int offset, int input)
+	public void setByte(int offset, Byte input)
 	{
-		this.block[offset].setData(input);
+		this.block[offset] = input;
 	}
 
 	public Byte[] getBlock()
@@ -74,5 +77,15 @@ public class Block
 	public void setBlock(Byte[] block)
 	{
 		this.block = block;
+	}
+	
+	public String toString()
+	{
+		String output =  "[" + ((valid)? 1 : 0) + "] [" + ((dirty)? 1 : 0) + "] [" + tag + "] " ;
+		
+		for (int i = 0; i < block.length; i++)
+			output += block[i];
+		
+		return output;
 	}
 }

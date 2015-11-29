@@ -7,26 +7,30 @@ public class Cache
 	private int sizeOfBlock; // L
 	private int mSets; // M
 	private Block[][] blocks;
-	private int accessDataCycles;
+	private int accessDataCycles; // Access Time in Cycles
 	private boolean writePolicyHit;  //True (Write Back) & False (Write Through)
 	private boolean writePolicyMiss; //True (Write Back) & False (Write Through)
-	private int accessTime; // Access Time in Cycles
 	// Cache variables (varies from Cache type to another)
 	private int index;
 	private int offset;
 
 	// TODO : Check if the inserted values are in Bytes (Multiple of 8)
 
-	public Cache(int s, int l, int m, boolean WPH, boolean WPM, int acessTime)
+	public Cache(int s, int l, int m, boolean WPH, boolean WPM, int accessTime)
 	{
 		sizeOfCache = s;
 		sizeOfBlock = l;
 		mSets = m;
 		numberOfBlocks = sizeOfCache / sizeOfBlock;
 		int noCol = numberOfBlocks / mSets;
-		setBlocks(new Block[noCol][mSets]);
 		writePolicyHit = WPH;
 		writePolicyMiss = WPM;
+		accessDataCycles = accessTime;
+
+		setBlocks(new Block[noCol][mSets]);	
+		for (int i = 0; i < blocks.length; i++)
+			for (int j = 0; j < blocks[i].length; j++)
+				blocks[i][j] = new Block(sizeOfBlock);
 	}
 
 	public int getSize()
@@ -116,7 +120,7 @@ public class Cache
 	{
 		boolean found = false;
 		
-		if (sizeOfBlock == bytes.length + 1)
+		if (sizeOfBlock == bytes.length)
 		{
 			for (int i = 0; i < blocks[index].length; i++)
 			{
@@ -124,7 +128,7 @@ public class Cache
 				{
 					for (int j = 0; j < bytes.length; j++)
 					{
-						blocks[index][i].setByte(j, bytes[j].getData());
+						blocks[index][i].setByte(j, bytes[j]);
 					}
 					found = true;	
 				}
@@ -167,14 +171,33 @@ public class Cache
 	{
 		this.writePolicyMiss = writePolicyMiss;
 	}
-
-	public int getAccessTime()
+	
+	public String toString()
 	{
-		return accessTime;
+		String output = "[V] [D] [T]   [Data]\n";
+		
+		for (int i = 0; i < blocks.length; i++)
+			for (int j = 0; j < blocks[i].length; j++)
+				output += blocks[i][j] + "\n";
+				
+		return output;
 	}
-
-	public void setAccessTime(int accessTime)
+	
+	public static void main(String[] args)
 	{
-		this.accessTime = accessTime;
+		Byte test = new Byte();
+		test.setData(127);
+		
+		Block tstBlck = new Block(4);
+		tstBlck.setByte(0, test);
+		tstBlck.setByte(1,  new Byte(127));
+		tstBlck.setValid(true);
+		tstBlck.setDirty(false);
+		tstBlck.setTag(6);
+		
+		Cache cacheTst = new Cache(16, 4, 1, true, true, 20);
+		cacheTst.setBlock(6, 2, tstBlck.getBlock());
+		
+		System.out.println(cacheTst);
 	}
 }
