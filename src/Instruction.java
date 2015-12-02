@@ -10,8 +10,9 @@ public class Instruction {
 	int written;
 	int committed;
 	int ROBIndex;
-	int answer;
 	int RSIndex;
+	int answer;
+
 
 	public Instruction(String op, int dest, int src, int unknown) {
 		issued = 0;

@@ -35,6 +35,7 @@ public class main
 	//							S2, L2 , M2, writePolicy2, writePolicy2, accessTime2,
 	//							S3, L3 , M3, writePolicy3, writePolicy3, accessTime3);
 	
+	static RegisterFile registerFile = new RegisterFile();
 	MainMemory mainMemory = new MainMemory();
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStation[] RS = {new ReservationStation("Load"), new ReservationStation("Store"), new ReservationStation("Add")

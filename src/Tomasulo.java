@@ -1,7 +1,24 @@
 public class Tomasulo {
 	public static void execute(Instruction ins){
 		int answer;
-		if(ins.cyclesLeft <= 0){
+		int srcValue;
+		boolean useReg = (main.registerFile.getRegister(ins.getSrcReg()).getstatus() == 0);
+		boolean useROB = (main.registerFile.getRegister(ins.getSrcReg()).getstatus() != 0 
+				&& main.rob.getRob(main.registerFile.getRegister(ins.getSrcReg()).getstatus()).isReady());
+		//useROB decides if use actual register or its updated copy in the ROB
+		if(!useReg && !useROB) {
+			return;
+		}
+		if(ins.getOp() == "ADD" || ins.getOp() == "BEQ" || ins.getOp() == "SUB" || ins.getOp() == "NAND" || ins.getOp() == "MUL"){
+			boolean useReg2 = (main.registerFile.getRegister(ins.getSrcReg2()).getstatus() == 0);
+			boolean useROB2 = (main.registerFile.getRegister(ins.getSrcReg2()).getstatus() != 0 
+					&& main.rob.getRob(main.registerFile.getRegister(ins.getSrcReg2()).getstatus()).isReady());
+			//useROB decides if use actual register or its updated copy in the ROB
+			if(!useReg2 && !useROB2) {
+				return;
+			}
+		}
+		if(ins.cyclesLeft <= 0){ 
 			switch (ins.getOp()) {
 			case "LW":
 				ins.setExecuted(main.cycle);
