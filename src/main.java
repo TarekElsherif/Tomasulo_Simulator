@@ -42,4 +42,18 @@ public class main
 								, new ReservationStation("Addd"), new ReservationStation("Multd")};
 	static int cycle;
 	static boolean written;
+	public static ReservationStation getRS(int i) {
+		return RS[i];
+	}
+	public static void removeFromRS(int i) {
+		RS[i].setBusy(false);
+		RS[i].setVj(null);
+		RS[i].setVk(null);
+		RS[i].setQj(-1);
+		RS[i].setQk(-1);
+		RS[i].setDest(-1);
+	}
+	public static void setRS(ReservationStation[] rS) {
+		RS = rS;
+	}
 }
