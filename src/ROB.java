@@ -12,9 +12,9 @@ public class ROB
 		rob = new ROBentry[ROBsize];
 	}
 
-	public ROBentry[] getRob()
+	public ROBentry getRob(int i)
 	{
-		return rob;
+		return rob[i];
 	}
 
 	public void setRob(ROBentry[] rob)

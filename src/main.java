@@ -18,7 +18,13 @@ public class main
 	boolean writePolicy3;
 	int accessTime3;
 	
-	int ROBsize = 15;
+	static int ROBsize = 15;
+	static int addLatency;
+	static int subLatency;
+	static int addiLatency;
+	static int beqLatency;
+	static int nandLatency;
+	static int mulLatency;
 	
 	Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1, accessTime1);
 	
@@ -30,8 +36,9 @@ public class main
 	//							S3, L3 , M3, writePolicy3, writePolicy3, accessTime3);
 	
 	MainMemory mainMemory = new MainMemory();
-	ROB rob = new ROB(ROBsize);
-	ReservationStation[] RS = {new ReservationStation("Load"), new ReservationStation("Store"), new ReservationStation("Add")
+	static ROB rob = new ROB(ROBsize);
+	static ReservationStation[] RS = {new ReservationStation("Load"), new ReservationStation("Store"), new ReservationStation("Add")
 								, new ReservationStation("Addd"), new ReservationStation("Multd")};
-	
+	static int cycle;
+	static boolean written;
 }
