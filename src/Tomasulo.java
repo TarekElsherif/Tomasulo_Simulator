@@ -1,4 +1,7 @@
 public class Tomasulo {
+	public static void issue(Instruction ins){
+		
+	}
 	public static void execute(Instruction ins){
 		int answer;
 		int firstOperand = 0;
@@ -37,28 +40,38 @@ public class Tomasulo {
 			switch (ins.getOp()) {
 			case "LW":
 				ins.setExecuted(main.cycle);
+				//TODO : call the read and write methods from memory
 				break;
 				
 			case "SW":
+				//TODO : call the read and write methods from memory
+				
 				ins.setExecuted(main.cycle);
 				break;
 	
 			case "JMP":
 				ins.setExecuted(main.cycle);
+				main.PC += 1+firstOperand+ins.getImmediate();
 				break;
 	
 			case "BEQ":
 				ins.setExecuted(main.cycle);
 				answer = firstOperand - secondOperand;
 				ins.setAnswer(answer);
+				if (answer == 0) main.PC += 1+ins.getImmediate();
+				else main.PC += 1;
+				//TODO : Still needs to handle branch prediction
 				break;
 	
 			case "JALR":
 				ins.setExecuted(main.cycle);
+				ins.setAnswer(main.PC + 1);
+				main.PC += 1+firstOperand;
 				break;
 				
 			case "RET":
 				ins.setExecuted(main.cycle);
+				main.PC = firstOperand;
 				break;
 				
 			case "ADD":
@@ -102,7 +115,7 @@ public class Tomasulo {
 	}
 	
 	public static void writeBack(Instruction ins, int answer) {
-		if(!main.written){
+		if(!main.writing){
 			if(ins.getOp() == "ST"){
 				//memory handling
 				ins.setWritten(main.cycle);	

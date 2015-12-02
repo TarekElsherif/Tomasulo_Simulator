@@ -1,6 +1,8 @@
 
 public class main
 {
+	// User Parameters
+	
 	int cacheLevels = 1;
 	int S1;
 	int L1;
@@ -26,6 +28,10 @@ public class main
 	static int nandLatency;
 	static int mulLatency;
 	
+	// Processor Variables
+	static int PC = 0;
+	static int cycle;
+	static boolean writing;
 	Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1, accessTime1);
 	
 	//Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1, accessTime1,
@@ -40,8 +46,6 @@ public class main
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStation[] RS = {new ReservationStation("Load"), new ReservationStation("Store"), new ReservationStation("Add")
 								, new ReservationStation("Addd"), new ReservationStation("Multd")};
-	static int cycle;
-	static boolean written;
 	public static ReservationStation getRS(int i) {
 		return RS[i];
 	}
