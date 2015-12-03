@@ -8,7 +8,7 @@ public class ROBentry
 	
 	public ROBentry()
 	{
-		setType(null);
+		type = "";
 		dest = -1;
 		value = 0;
 		ready = false;

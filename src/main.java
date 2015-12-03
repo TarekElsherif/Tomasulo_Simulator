@@ -20,7 +20,7 @@ public class main
 	boolean writePolicy3;
 	int accessTime3;
 	
-	static int ROBsize = 15;
+	static int ROBsize = 5;
 	static int addLatency;
 	static int subLatency;
 	static int addiLatency;
@@ -46,5 +46,21 @@ public class main
 	static MainMemory mainMemory = new MainMemory();
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStations RS = new ReservationStations();
+	
+	public static void main(String[]args){
+		registerFile.getRegister(2).setdata(2);
+		registerFile.getRegister(3).setdata(3);
+		Instruction i = new Instruction("ADD", 1, 2, 3);
+		
+		Tomasulo.issue(i);
+		Tomasulo.execute(i);
+		Tomasulo.writeBack(i);
+		Tomasulo.commit(i);
+		rob.tostring();
+		RS.tostring();
+		System.out.println(i.getAnswer());
+		System.out.println(i.getRSIndex());
+		System.out.println(i.getROBIndex());
+	}
 	
 }

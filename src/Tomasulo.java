@@ -5,12 +5,14 @@ public class Tomasulo {
 		if(checkRS || checkROB) return;
 		
 		//ROB modification
-		main.rob.setRob(main.rob.getTail(), ins.getOp(), ins.getDestReg(), 0, false);
-		main.registerFile.getRegister(ins.getDestReg()).setstatus(main.rob.getTail());
 		main.rob.incTail();
+		main.rob.setRob(main.rob.getTail() - 1, ins.getOp(), ins.getDestReg(), 0, false);
+		main.registerFile.getRegister(ins.getDestReg()).setstatus(main.rob.getTail() - 1);
+		ins.setROBIndex(main.rob.getTail()-1);
 		
 		//RS modification
 		ReservationStation s = main.RS.getRSbyFU(ins.getFU());
+		ins.setRSIndex(main.RS.getIndexbyFU(ins.getFU()));
 		s.setOp(ins.getOp());
 		s.setDest(main.rob.getTail() - 1);
 		s.setVj(main.registerFile.getRegister(ins.getSrcReg()));
@@ -33,6 +35,7 @@ public class Tomasulo {
 		}
 		ins.setIssued(main.cycle);
 	}
+	
 	public static void execute(Instruction ins){
 		int answer;
 		int firstOperand = 0;
@@ -145,14 +148,14 @@ public class Tomasulo {
 		}
 	}
 	
-	public static void writeBack(Instruction ins, int answer) {
+	public static void writeBack(Instruction ins) {
 		if(!main.writing){
 			if(ins.getOp() == "ST"){
 				//memory handling
 				ins.setWritten(main.cycle);	
 			}
 			else{
-				main.rob.getRob(ins.getROBIndex()).setValue(answer);
+				main.rob.getRob(ins.getROBIndex()).setValue(ins.getAnswer());
 				main.rob.getRob(ins.getROBIndex()).setReady(true);
 				main.RS.removeFromRS(ins.getRSIndex());
 				ins.setWritten(main.cycle);
@@ -160,17 +163,19 @@ public class Tomasulo {
 		}
 		
 	}
+	
 	public static void commit(Instruction ins){
 		if(!main.committing){
 			if(ins.getROBIndex() == main.rob.getHead()){
+				main.rob.incHead();
 				Register r = main.registerFile.getRegister(main.rob.getRob(ins.getROBIndex()).getDest());
 				r.setstatus(0);
 				r.setdata(main.rob.getRob(ins.getROBIndex()).getValue());
-				main.rob.getRob(ins.getROBIndex()).setType(null);
+				main.rob.getRob(ins.getROBIndex()).setType("");
 				main.rob.getRob(ins.getROBIndex()).setDest(-1);
 				main.rob.getRob(ins.getROBIndex()).setValue(0);
 				main.rob.getRob(ins.getROBIndex()).setReady(false);
-				main.rob.incHead();
+
 			}
 		}
 	}
