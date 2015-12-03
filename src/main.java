@@ -32,6 +32,7 @@ public class main
 	static int PC = 0;
 	static int cycle;
 	static boolean writing;
+	static boolean committing;
 	Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1, accessTime1);
 	
 	//Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1, accessTime1,
@@ -42,22 +43,8 @@ public class main
 	//							S3, L3 , M3, writePolicy3, writePolicy3, accessTime3);
 	
 	static RegisterFile registerFile = new RegisterFile();
-	MainMemory mainMemory = new MainMemory();
+	static MainMemory mainMemory = new MainMemory();
 	static ROB rob = new ROB(ROBsize);
-	static ReservationStation[] RS = {new ReservationStation("Load"), new ReservationStation("Store"), new ReservationStation("Add")
-								, new ReservationStation("Addd"), new ReservationStation("Multd")};
-	public static ReservationStation getRS(int i) {
-		return RS[i];
-	}
-	public static void removeFromRS(int i) {
-		RS[i].setBusy(false);
-		RS[i].setVj(null);
-		RS[i].setVk(null);
-		RS[i].setQj(-1);
-		RS[i].setQk(-1);
-		RS[i].setDest(-1);
-	}
-	public static void setRS(ReservationStation[] rS) {
-		RS = rS;
-	}
+	static ReservationStations RS = new ReservationStations();
+	
 }

@@ -12,6 +12,7 @@ public class Instruction {
 	int ROBIndex;
 	int RSIndex;
 	int answer;
+	String FU;
 
 
 	public Instruction(String op, int dest, int src, int unknown) {
@@ -25,50 +26,61 @@ public class Instruction {
 		switch (op) {
 		case "LW":
 			immediate = unknown;
+			FU = "LOAD";
 			break;
 
 		case "SW":
 			immediate = unknown;
+			FU = "STORE";
 			break;
 
 		case "JMP":
 			cyclesLeft = 0;
 			immediate = unknown;
+			FU = "INT";
 			break;
 
 		case "BEQ":
 			cyclesLeft = main.subLatency;
 			immediate = unknown;
+			FU = "INT";
 			break;
 
 		case "JALR":
 			cyclesLeft = 0;
+			FU = "INT";
 			break;
 
 		case "RET":
 			cyclesLeft = 0;
+			FU = "INT";
 			break;
 
 		case "ADD":
 			cyclesLeft = main.addLatency;
 			srcReg2 = unknown;
+			FU = "INT";
 			break;
 		case "SUB":
 			cyclesLeft = main.subLatency;
 			srcReg2 = unknown;
+			FU = "INT";
 			break;
 		case "NAND":
 			cyclesLeft = main.nandLatency;
 			srcReg2 = unknown;
+			FU = "INT";
 			break;
 		case "MUL":
 			cyclesLeft = main.mulLatency;
 			srcReg2 = unknown;
+			FU = "MULT";
 			break;
 
 		case "ADDI":
 			cyclesLeft = main.addiLatency;
 			immediate = unknown;
+			FU = "INT";
 			break;
 
 		default:
@@ -178,6 +190,14 @@ public class Instruction {
 
 	public void setRSIndex(int rSIndex) {
 		RSIndex = rSIndex;
+	}
+
+	public String getFU() {
+		return FU;
+	}
+
+	public void setFU(String fU) {
+		FU = fU;
 	}
 
 }

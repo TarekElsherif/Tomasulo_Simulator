@@ -2,14 +2,14 @@
 public class ROBentry
 {
 	private String type;
-	private String dest;
+	private int dest;
 	private int value;
 	private boolean ready;
 	
 	public ROBentry()
 	{
 		setType(null);
-		dest = null;
+		dest = -1;
 		value = 0;
 		ready = false;
 	}
@@ -24,12 +24,12 @@ public class ROBentry
 		this.type = type;
 	}
 
-	public String getDest()
+	public int getDest()
 	{
 		return dest;
 	}
 
-	public void setDest(String dest)
+	public void setDest(int dest)
 	{
 		this.dest = dest;
 	}

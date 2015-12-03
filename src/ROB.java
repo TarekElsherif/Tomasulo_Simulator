@@ -17,9 +17,12 @@ public class ROB
 		return rob[i];
 	}
 
-	public void setRob(ROBentry[] rob)
+	public void setRob(int i, String type, int dest, int value, boolean ready)
 	{
-		this.rob = rob;
+		this.rob[i].setDest(dest);
+		this.rob[i].setReady(ready);
+		this.rob[i].setType(type);
+		this.rob[i].setValue(value);
 	}
 
 	public int getHead()
@@ -61,5 +64,12 @@ public class ROB
 			else tail++;
 	}
 	
+	public boolean isFull(){
+		if (head == tail && !rob[head].getType().equals(null)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }
