@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Hashtable;
 
 public class Cache
 {
@@ -8,29 +10,35 @@ public class Cache
 	private int mSets; // M
 	private Block[][] blocks;
 	private int accessDataCycles; // Access Time in Cycles
-	private boolean writePolicyHit;  //True (Write Back) & False (Write Through)
-	private boolean writePolicyMiss; //True (Write Back) & False (Write Through)
-	// Cache variables (varies from Cache type to another)
-	private int index;
-	private int offset;
+	private boolean writePolicy; // True (Write Back) & False (Write Through)
+	private ArrayList<Integer>[] lru;
+	private Hashtable<String, Object> buffer = new Hashtable<String, Object>();
 
 	// TODO : Check if the inserted values are in Bytes (Multiple of 8)
 
-	public Cache(int s, int l, int m, boolean WPH, boolean WPM, int accessTime)
+	@SuppressWarnings("unchecked")
+	public Cache(int s, int l, int m, boolean WP, int accessTime)
 	{
 		sizeOfCache = s;
 		sizeOfBlock = l;
 		mSets = m;
 		numberOfBlocks = sizeOfCache / sizeOfBlock;
 		int noCol = numberOfBlocks / mSets;
-		writePolicyHit = WPH;
-		writePolicyMiss = WPM;
+		writePolicy = WP;
 		accessDataCycles = accessTime;
 
-		setBlocks(new Block[noCol][mSets]);	
+		lru = new ArrayList[noCol];
+		setBlocks(new Block[noCol][mSets]);
+
 		for (int i = 0; i < blocks.length; i++)
+		{
+			lru[i] = new ArrayList<Integer>();
 			for (int j = 0; j < blocks[i].length; j++)
+			{
+				lru[i].add(j);
 				blocks[i][j] = new Block(sizeOfBlock);
+			}
+		}
 	}
 
 	public int getSize()
@@ -63,26 +71,6 @@ public class Cache
 		this.sizeOfBlock = sizeOfBlock;
 	}
 
-	public int getIndex()
-	{
-		return index;
-	}
-
-	public void setIndex(int index)
-	{
-		this.index = index;
-	}
-
-	public int getOffset()
-	{
-		return offset;
-	}
-
-	public void setOffset(int offset)
-	{
-		this.offset = offset;
-	}
-
 	public int getmSets()
 	{
 		return mSets;
@@ -103,12 +91,13 @@ public class Cache
 		this.blocks = blocks;
 	}
 
-	public Block getBlock(int tag, int index)
+	public Block readBlock(int index, int tag)
 	{
 		for (int i = 0; i < blocks[index].length; i++)
 		{
 			if (blocks[index][i].getTag() == tag)
 			{
+				lru[index].add(lru[index].remove(lru[index].indexOf(i)));
 				return blocks[index][i];
 			}
 		}
@@ -116,30 +105,67 @@ public class Cache
 		return null;
 	}
 
-	public void setBlock(int tag, int index, Byte[] bytes)
+	public boolean placeBlock(int index, int tag, Byte[] bytes)
 	{
-		boolean found = false;
-		
+		if (sizeOfBlock == bytes.length)
+		{
+			for (int i = 0; i < blocks[index].length; i++)
+			{
+				if (!blocks[index][i].isValid())
+				{
+					blocks[index][i].setBlock(bytes);
+					blocks[index][i].setValid(true);
+					blocks[index][i].setTag(tag);
+					lru[index].add(lru[index].remove(lru[index].indexOf(i)));
+					return true;
+				}
+			}
+			if (writePolicy && blocks[index][lru[index].get(0)].isDirty())
+			{
+				buffer.put("Data", blocks[index][lru[index].get(0)].getBlock());
+				buffer.put("Index", index);
+				buffer.put("tag", blocks[index][lru[index].get(0)].getTag());
+				// TODO Write Back to MainMemory using write policies.
+			}
+			else
+			{
+				buffer.clear();
+			}
+			blocks[index][lru[index].get(0)].setBlock(bytes);
+			blocks[index][lru[index].get(0)].setValid(true);
+			blocks[index][lru[index].get(0)].setTag(tag);
+			lru[index].add(lru[index].remove(0));
+			return true;
+		} else
+		{
+			System.out.println("Block Size not Compatible - Cache Class");
+			return false;
+		}
+	}
+
+	public boolean writeToBlock(int index, int tag, Byte[] bytes)
+	{
 		if (sizeOfBlock == bytes.length)
 		{
 			for (int i = 0; i < blocks[index].length; i++)
 			{
 				if (blocks[index][i].getTag() == tag)
 				{
-					for (int j = 0; j < bytes.length; j++)
-					{
-						blocks[index][i].setByte(j, bytes[j]);
-					}
-					found = true;	
+					blocks[index][i].setBlock(bytes);
+					blocks[index][i].setValid(true);
+					blocks[index][i].setDirty(true);
+					blocks[index][i].setTag(tag);
+					lru[index].add(lru[index].remove(lru[index].indexOf(i)));
+					return true;
 				}
 			}
-			if (!found) { System.out.println("Block Not Found (Write Miss) - Cache Class");}
-		}
-		else
+			System.out.println("Block Not Found (Write Miss) - Cache Class");
+			return false;
+		} else
 		{
 			System.out.println("Block Size not Compatible - Cache Class");
+			return false;
 		}
-
 	}
 
 	public int getAccessDataCycles()
@@ -152,52 +178,47 @@ public class Cache
 		this.accessDataCycles = accessDataCycles;
 	}
 
-	public boolean isWritePolicyHit()
+	public boolean isWritePolicy()
 	{
-		return writePolicyHit;
+		return writePolicy;
 	}
 
-	public void setWritePolicyHit(boolean writePolicyHit)
+	public void setWritePolicy(boolean writePolicyHit)
 	{
-		this.writePolicyHit = writePolicyHit;
+		this.writePolicy = writePolicyHit;
 	}
 
-	public boolean isWritePolicyMiss()
-	{
-		return writePolicyMiss;
-	}
-
-	public void setWritePolicyMiss(boolean writePolicyMiss)
-	{
-		this.writePolicyMiss = writePolicyMiss;
-	}
-	
 	public String toString()
 	{
 		String output = "[V] [D] [T]   [Data]\n";
-		
+
 		for (int i = 0; i < blocks.length; i++)
 			for (int j = 0; j < blocks[i].length; j++)
 				output += blocks[i][j] + "\n";
-				
+
 		return output;
 	}
-	
+
 	public static void main(String[] args)
 	{
 		Byte test = new Byte();
 		test.setData(127);
-		
+
 		Block tstBlck = new Block(4);
 		tstBlck.setByte(0, test);
-		tstBlck.setByte(1,  new Byte(127));
+		tstBlck.setByte(1, new Byte(127));
 		tstBlck.setValid(true);
 		tstBlck.setDirty(false);
 		tstBlck.setTag(6);
-		
-		Cache cacheTst = new Cache(16, 4, 1, true, true, 20);
-		cacheTst.setBlock(6, 2, tstBlck.getBlock());
-		
+
+		Cache cacheTst = new Cache(16, 4, 2, true, 20);
+		cacheTst.placeBlock(0, 0, tstBlck.getBlock());
+		cacheTst.placeBlock(0, 1, tstBlck.getBlock());
+		cacheTst.placeBlock(0, 2, tstBlck.getBlock());
+		cacheTst.placeBlock(0, 3, tstBlck.getBlock());
+		cacheTst.writeToBlock(0, 2, new Byte[] { new Byte(25), new Byte(30), new Byte(55), new Byte(90) });
+
+		System.out.println(cacheTst.readBlock(0, 3));
 		System.out.println(cacheTst);
 	}
 }
