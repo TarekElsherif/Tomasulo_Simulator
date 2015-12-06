@@ -46,10 +46,10 @@ public class ReservationStations {
 			System.out.print(RS[i].isBusy() + ", ");
 			System.out.print(RS[i].getOp() + ", ");
 			if (RS[i].getVj() != null) {
-				System.out.print(RS[i].getVj() + ", ");
+				System.out.print(RS[i].getVj().getname() + ", ");
 			}
 			if (RS[i].getVk() != null) {
-				System.out.print(RS[i].getVk() + ", ");
+				System.out.print(RS[i].getVk().getname() + ", ");
 			}
 			System.out.print(RS[i].getQj() + ", ");
 			System.out.print(RS[i].getQk() + ", ");
