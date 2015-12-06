@@ -8,7 +8,7 @@ public class Register
 	public Register(int name)
 	{
 		this.name = "R" + name;
-		status = 0;
+		status = -1;
 		data = 0;
 	}
 	public String getname()
@@ -21,6 +21,7 @@ public class Register
 	}
 	public void setstatus(int status)
 	{
+		System.out.println("Testing Status Change");
 		this.status = status; // (-1) because ROB is Zero indexed
 	}
 	public int getdata()

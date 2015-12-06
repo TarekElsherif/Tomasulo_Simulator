@@ -52,13 +52,14 @@ public class main {
 		cycle = 1;
 		addLatency = 1;
 		subLatency = 2;
+		registerFile.getRegister(1).setdata(1);
 		registerFile.getRegister(2).setdata(2);
 		registerFile.getRegister(3).setdata(3);
-		registerFile.getRegister(4).setdata(5);
-		registerFile.getRegister(5).setdata(3);
+		registerFile.getRegister(4).setdata(4);
+		registerFile.getRegister(5).setdata(5);
 
 		Instruction i = new Instruction("ADD", 1, 2, 3);
-		Instruction j = new Instruction("SUB", 3, 4, 1);
+		Instruction j = new Instruction("SUB", 3, 1, 4);
 		Instruction k = new Instruction("ADD", 5, 2, 4);
 		Instruction[] ins = { i, j, k };
 		while (cycle < 10) {
@@ -79,10 +80,6 @@ public class main {
 						}
 					}
 				}
-				System.out.println(l
-						+ ": "
-						+ main.registerFile.getRegister(ins[l].getSrcReg2())
-								.getstatus());
 			}
 			System.out.println();
 			System.out.println("-------------------------------");
@@ -97,6 +94,23 @@ public class main {
 			rob.tostring();
 			System.out.println("Reservation Stations: ");
 			RS.tostring();
+			for (int l = 0; l < ins.length; l++)
+			{
+			System.out.println(l
+					+ ": "
+					+ main.registerFile.getRegister(ins[l].getDestReg())
+							.getstatus());
+			}
+			System.out.println("*******");
+			System.out.println("R1 : " + main.registerFile.getRegister(1).getdata());
+			System.out.println("R2 : " + main.registerFile.getRegister(2).getdata());
+			System.out.println("R3 : " + main.registerFile.getRegister(3).getdata());
+			System.out.println("R4 : " + main.registerFile.getRegister(4).getdata());
+			System.out.println("R5 : " + main.registerFile.getRegister(5).getdata());
+			System.out.println("*******");
+			System.out.println(" ");
+			System.out.println(" ");
+			System.out.println(" ");
 			// System.out.println("the answer: " + ins[l].getAnswer());
 			// System.out.println("the ROB index: " + ins[l].getRSIndex());
 			// System.out.println("the RS index: " + ins[l].getROBIndex());
