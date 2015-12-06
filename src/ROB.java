@@ -28,7 +28,7 @@ public class ROB {
 	}
 
 	public void incHead() {
-		if (rob[0].getType().equals("")) {
+		if (rob[head].getType().equals("")) {
 			System.out.println("ROB is Empty Can NOT increment Head - ROB Class");
 			return;
 		}

@@ -14,6 +14,7 @@ public class Tomasulo {
 		ReservationStation s = main.RS.getRSbyFU(ins.getFU());
 		ins.setRSIndex(main.RS.getIndexbyFU(ins.getFU()));
 		s.setOp(ins.getOp());
+		s.setBusy(true);
 		s.setDest(main.rob.getTail() - 1);
 		s.setVj(main.registerFile.getRegister(ins.getSrcReg()));
 		if(main.registerFile.getRegister(ins.getSrcReg()).getstatus() != 0){
@@ -70,7 +71,7 @@ public class Tomasulo {
 				secondOperand = main.rob.getRob(ins.getROBIndex()).getValue();
 			}
 		}
-		if(ins.cyclesLeft <= 0){ 
+		if(ins.cyclesLeft <= 1){ 
 			switch (ins.getOp()) {
 			case "LW":
 				ins.setExecuted(main.cycle);
@@ -167,10 +168,11 @@ public class Tomasulo {
 	public static void commit(Instruction ins){
 		if(!main.committing){
 			if(ins.getROBIndex() == main.rob.getHead()){
-				main.rob.incHead();
+
 				Register r = main.registerFile.getRegister(main.rob.getRob(ins.getROBIndex()).getDest());
 				r.setstatus(0);
 				r.setdata(main.rob.getRob(ins.getROBIndex()).getValue());
+				main.rob.incHead();
 				main.rob.getRob(ins.getROBIndex()).setType("");
 				main.rob.getRob(ins.getROBIndex()).setDest(-1);
 				main.rob.getRob(ins.getROBIndex()).setValue(0);

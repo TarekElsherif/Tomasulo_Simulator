@@ -21,7 +21,7 @@ public class Register
 	}
 	public void setstatus(int status)
 	{
-		this.status = status - 1; // (-1) because ROB is Zero indexed
+		this.status = status; // (-1) because ROB is Zero indexed
 	}
 	public int getdata()
 	{
