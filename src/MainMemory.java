@@ -1,6 +1,6 @@
 public class MainMemory
 {
-	private static Byte[] mainMemory = new Byte[65535];
+	private Byte[] mainMemory = new Byte[65535];
 
 	public MainMemory()
 	{
