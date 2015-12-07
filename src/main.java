@@ -52,6 +52,7 @@ public class main {
 		cycle = 1;
 		addLatency = 1;
 		subLatency = 2;
+		mulLatency = 1;
 		registerFile.getRegister(1).setdata(1);
 		registerFile.getRegister(2).setdata(2);
 		registerFile.getRegister(3).setdata(3);
@@ -59,7 +60,7 @@ public class main {
 		registerFile.getRegister(5).setdata(5);
 
 		Instruction i = new Instruction("ADD", 1, 2, 3);
-		Instruction j = new Instruction("SUB", 3, 1, 4);
+		Instruction j = new Instruction("MUL", 3, 1, 4);
 		Instruction k = new Instruction("ADD", 5, 2, 4);
 		Instruction[] ins = { i, j, k };
 		while (cycle < 10) {
