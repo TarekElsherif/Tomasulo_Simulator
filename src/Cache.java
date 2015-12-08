@@ -7,28 +7,27 @@ public class Cache
 	private int sizeOfCache; // S
 	private int numberOfBlocks; // C
 	private int sizeOfBlock; // L
-	private int mSets; // M
+	private int mWay; // M
+	private int noSets;
 	private Block[][] blocks;
 	private int accessDataCycles; // Access Time in Cycles
 	private boolean writePolicy; // True (Write Back) & False (Write Through)
 	private ArrayList<Integer>[] lru;
 	private Hashtable<String, Object> buffer = new Hashtable<String, Object>();
 
-	// TODO : Check if the inserted values are in Bytes (Multiple of 8)
-
 	@SuppressWarnings("unchecked")
 	public Cache(int s, int l, int m, boolean WP, int accessTime)
 	{
 		sizeOfCache = s;
 		sizeOfBlock = l;
-		mSets = m;
+		mWay = m;
 		numberOfBlocks = sizeOfCache / sizeOfBlock;
-		int noCol = numberOfBlocks / mSets;
+		noSets = numberOfBlocks / mWay;
 		writePolicy = WP;
 		accessDataCycles = accessTime;
 
-		lru = new ArrayList[noCol];
-		setBlocks(new Block[noCol][mSets]);
+		lru = new ArrayList[noSets];
+		blocks = new Block[noSets][mWay];
 
 		for (int i = 0; i < blocks.length; i++)
 		{
@@ -46,67 +45,59 @@ public class Cache
 		return sizeOfCache;
 	}
 
-	public void setSize(int sizeOfCache)
-	{
-		this.sizeOfCache = sizeOfCache;
-	}
-
-	public int getnumberOfBlocks()
-	{
-		return numberOfBlocks;
-	}
-
-	public void setnumberOfBlocks(int numberOfBlocks)
-	{
-		this.numberOfBlocks = numberOfBlocks;
-	}
-
 	public int getsizeOfBlock()
 	{
 		return sizeOfBlock;
 	}
 
-	public void setsizeOfBlock(int sizeOfBlock)
+	public int getmWay()
 	{
-		this.sizeOfBlock = sizeOfBlock;
+		return mWay;
 	}
 
-	public int getmSets()
+	public Hashtable<String, Object> getBuffer()
 	{
-		return mSets;
+		return buffer;
 	}
 
-	public void setmSets(int mSets)
+	public int getNoSets()
 	{
-		this.mSets = mSets;
+		return noSets;
+	}
+	
+	public int getAccessDataCycles()
+	{
+		return accessDataCycles;
 	}
 
-	public Block[][] getBlocks()
+	public boolean getWritePolicy()
 	{
-		return blocks;
+		return writePolicy;
 	}
 
-	public void setBlocks(Block[][] blocks)
+	public Byte readByte(int address)
 	{
-		this.blocks = blocks;
-	}
+		int index = getIndex(address);
+		int tag = getTag(address);
+		int offset = getOffset(address);
 
-	public Block readBlock(int index, int tag)
-	{
 		for (int i = 0; i < blocks[index].length; i++)
 		{
 			if (blocks[index][i].getTag() == tag)
 			{
 				lru[index].add(lru[index].remove(lru[index].indexOf(i)));
-				return blocks[index][i];
+				return blocks[index][i].getByte(offset);
 			}
 		}
 		System.out.println("Block not found (Read Miss) - Cache class");
 		return null;
 	}
 
-	public boolean placeBlock(int index, int tag, Byte[] bytes)
+	public boolean placeBlock(int address, Byte[] bytes)
 	{
+		int index = getIndex(address);
+		int tag = getTag(address);
+
 		if (sizeOfBlock == bytes.length)
 		{
 			for (int i = 0; i < blocks[index].length; i++)
@@ -124,101 +115,119 @@ public class Cache
 			{
 				buffer.put("Data", blocks[index][lru[index].get(0)].getBlock());
 				buffer.put("Index", index);
-				buffer.put("tag", blocks[index][lru[index].get(0)].getTag());
-				// TODO Write Back to MainMemory using write policies.
-			}
+				buffer.put("Tag", blocks[index][lru[index].get(0)].getTag());
+			} 
 			else
-			{
 				buffer.clear();
-			}
+			
 			blocks[index][lru[index].get(0)].setBlock(bytes);
 			blocks[index][lru[index].get(0)].setValid(true);
 			blocks[index][lru[index].get(0)].setTag(tag);
 			lru[index].add(lru[index].remove(0));
 			return true;
-		} else
+		}
+		else
 		{
 			System.out.println("Block Size not Compatible - Cache Class");
 			return false;
 		}
 	}
 
-	public boolean writeToBlock(int index, int tag, Byte[] bytes)
+	public boolean writeByte(int address, Byte inputByte)
 	{
-		if (sizeOfBlock == bytes.length)
+		int index = getIndex(address);
+		int tag = getTag(address);
+		int offset = getOffset(address);
+		
+		for (int i = 0; i < blocks[index].length; i++)
 		{
-			for (int i = 0; i < blocks[index].length; i++)
+			if (blocks[index][i].getTag() == tag)
 			{
-				if (blocks[index][i].getTag() == tag)
-				{
-					blocks[index][i].setBlock(bytes);
-					blocks[index][i].setValid(true);
-					blocks[index][i].setDirty(true);
-					blocks[index][i].setTag(tag);
-					lru[index].add(lru[index].remove(lru[index].indexOf(i)));
-					return true;
-				}
+				blocks[index][i].setByte(offset, inputByte);
+				blocks[index][i].setValid(true);
+				blocks[index][i].setDirty(true);
+				blocks[index][i].setTag(tag);
+				lru[index].add(lru[index].remove(lru[index].indexOf(i)));
+				return true;
 			}
-			System.out.println("Block Not Found (Write Miss) - Cache Class");
-			return false;
-		} else
-		{
-			System.out.println("Block Size not Compatible - Cache Class");
-			return false;
 		}
+		
+		System.out.println("Block Not Found (Write Miss) - Cache Class");
+		return false;
+	}
+	
+	public boolean contains(int address)
+	{
+		int index = getIndex(address);
+		int tag = getTag(address);
+
+		for (int i = 0; i < blocks[index].length; i++)
+		{
+			if (blocks[index][i].isValid() && blocks[index][i].getTag() == tag)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public int getAccessDataCycles()
+	private int getIndex(int address)
 	{
-		return accessDataCycles;
+		return Math.floorMod(address/sizeOfBlock, noSets);
 	}
 
-	public void setAccessDataCycles(int accessDataCycles)
+	private int getTag(int address)
 	{
-		this.accessDataCycles = accessDataCycles;
+		int offsetBits = (int) Math.ceil(Math.log(sizeOfBlock) / Math.log(2));
+		int indexBits = (int) Math.ceil((Math.log(noSets) / Math.log(2)));
+		int tag = address >>> (indexBits + offsetBits);
+			return tag;
 	}
 
-	public boolean isWritePolicy()
+	private int getOffset(int address)
 	{
-		return writePolicy;
-	}
-
-	public void setWritePolicy(boolean writePolicyHit)
-	{
-		this.writePolicy = writePolicyHit;
+		return Math.floorMod(address, sizeOfBlock);
 	}
 
 	public String toString()
 	{
-		String output = "[V] [D] [T]   [Data]\n";
+		String output = "[V] [D] [T]   [Data]\n-----------------------\n";
 
 		for (int i = 0; i < blocks.length; i++)
+		{
 			for (int j = 0; j < blocks[i].length; j++)
 				output += blocks[i][j] + "\n";
-
+			output += "-----------------------\n";
+		}
 		return output;
 	}
 
 	public static void main(String[] args)
 	{
 		Byte test = new Byte();
-		test.setData(127);
+		test.setData(1);
 
 		Block tstBlck = new Block(4);
 		tstBlck.setByte(0, test);
-		tstBlck.setByte(1, new Byte(127));
+		tstBlck.setByte(1, new Byte(2));
+		tstBlck.setByte(2, new Byte(3));
+		tstBlck.setByte(3, new Byte(4));
 		tstBlck.setValid(true);
 		tstBlck.setDirty(false);
 		tstBlck.setTag(6);
 
-		Cache cacheTst = new Cache(16, 4, 2, true, 20);
-		cacheTst.placeBlock(0, 0, tstBlck.getBlock());
-		cacheTst.placeBlock(0, 1, tstBlck.getBlock());
-		cacheTst.placeBlock(0, 2, tstBlck.getBlock());
-		cacheTst.placeBlock(0, 3, tstBlck.getBlock());
-		cacheTst.writeToBlock(0, 2, new Byte[] { new Byte(25), new Byte(30), new Byte(55), new Byte(90) });
-
-		System.out.println(cacheTst.readBlock(0, 3));
+		Cache cacheTst = new Cache(32, 4, 2, true, 20);
+		cacheTst.placeBlock(0, tstBlck.getBlock());
+		cacheTst.placeBlock(1, tstBlck.getBlock());
+		cacheTst.placeBlock(2, tstBlck.getBlock());
+		cacheTst.placeBlock(3, tstBlck.getBlock());
+//		cacheTst.writeToBlock(0, 2, new Byte[] { new Byte(25), new Byte(30), new Byte(55), new Byte(90) });
 		System.out.println(cacheTst);
+		
+		
+//		int tst = 30;
+//		System.out.println("Tag: " + cacheTst.getTag(tst));
+//		System.out.println("Index: " + cacheTst.getIndex(tst));
+//		System.out.println("Offset: " + cacheTst.getOffset(tst));
 	}
 }
