@@ -1,3 +1,8 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
 public class main {
 	// User Parameters
 
@@ -25,6 +30,15 @@ public class main {
 	static int beqLatency;
 	static int nandLatency;
 	static int mulLatency;
+	
+	// Simulator Outputs
+	int noOfCycles;
+	double IPC;
+	int hitRatio1; // hit ratio of cache level 1
+	int hitRatio2; // hit ratio of cache level 2
+	int hitRatio3; // hit ratio of cache level 3
+	double AMAT;
+	double bmp; // branch misprediction percentage
 
 	// Processor Variables
 	static int PC = 0;
@@ -47,6 +61,7 @@ public class main {
 	static MainMemory mainMemory = new MainMemory();
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStations RS = new ReservationStations();
+	
 
 	public static void main(String[] args) {
 		cycle = 1;
@@ -57,25 +72,34 @@ public class main {
 		registerFile.getRegister(3).setdata(3);
 		registerFile.getRegister(4).setdata(4);
 		registerFile.getRegister(5).setdata(5);
+		
+		Parser p = new Parser(); // Parser reads input from instructions.txt and data.txt
+		ArrayList<Instruction> ins = p.getInstructions(); // Instructions input
+		ArrayList<Byte> data = p.getBytes(); // Data input
+		int ins_a = p.getInsAddress(); // Memory address of instructions
+		int data_a = p.getDataAddress(); // Memory address of data
+		
+		// Initialize memory
+		//Memory mem = new Memory();
 
-		Instruction i = new Instruction("ADD", 1, 2, 3);
-		Instruction j = new Instruction("SUB", 3, 1, 4);
-		Instruction k = new Instruction("ADD", 5, 2, 4);
-		Instruction[] ins = { i, j, k };
+//		Instruction i = new Instruction("ADD", 1, 2, 3);
+//		Instruction j = new Instruction("SUB", 3, 1, 4);
+//		Instruction k = new Instruction("ADD", 5, 2, 4);
+		//Instruction[] ins = { i, j, k };
 		while (cycle < 10) {
 			// while (ins[2].getCommitted() == 0) {
-			for (int l = 0; l < ins.length; l++) {
-				if (ins[l].getIssued() == 0) {
-					Tomasulo.issue(ins[l]);
+			for (int l = 0; l < ins.size(); l++) {
+				if (ins.get(l).getIssued() == 0) {
+					Tomasulo.issue(ins.get(l));
 				} else {
-					if (ins[l].getExecuted() == 0) {
-						Tomasulo.execute(ins[l]);
+					if (ins.get(l).getExecuted() == 0) {
+						Tomasulo.execute(ins.get(l));
 					} else {
-						if (ins[l].getWritten() == 0) {
-							Tomasulo.writeBack(ins[l]);
+						if (ins.get(l).getWritten() == 0) {
+							Tomasulo.writeBack(ins.get(l));
 						} else {
-							if (ins[l].getCommitted() == 0) {
-								Tomasulo.commit(ins[l]);
+							if (ins.get(l).getCommitted() == 0) {
+								Tomasulo.commit(ins.get(l));
 							}
 						}
 					}
@@ -94,11 +118,11 @@ public class main {
 			rob.tostring();
 			System.out.println("Reservation Stations: ");
 			RS.tostring();
-			for (int l = 0; l < ins.length; l++)
+			for (int l = 0; l < ins.size(); l++)
 			{
 			System.out.println(l
 					+ ": "
-					+ main.registerFile.getRegister(ins[l].getDestReg())
+					+ main.registerFile.getRegister(ins.get(l).getDestReg())
 							.getstatus());
 			}
 			System.out.println("*******");
@@ -117,5 +141,8 @@ public class main {
 			cycle++;
 		}
 		// }
+		
+		// Simulator Outputs
+		System.out.println();
 	}
 }
