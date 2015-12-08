@@ -3,6 +3,7 @@ public class Memory
 	private Cache[] memory;
 	private MainMemory mainMemory;
 	
+//	{{Constructors
 	public Memory(int s, int l, int m, boolean WP, int accessTime)
 	{
 		memory = new Cache[] {new Cache (s, l, m, WP, accessTime)};
@@ -26,7 +27,9 @@ public class Memory
 				, new Cache (s3, l3, m3, WP3, accessTime3)};
 		mainMemory = new MainMemory();
 	}
-	
+//	}}
+
+//	{{Data Methods
 	public int readData(int address)
 	{
 		int i;
@@ -61,7 +64,7 @@ public class Memory
 					for (int j = i + 1; j < memory.length; j++)
 					{
 						for (int k = 0; k < dirtyData.length; k++)
-							memory[j].writeToBlock(reWriteAddress + k, dirtyData[k]);
+							memory[j].writeByte(reWriteAddress + k, dirtyData[k]);
 						
 						if(memory[j].getWritePolicy())
 							break;
@@ -79,7 +82,7 @@ public class Memory
 		{
 			if (memory[i].contains(address))
 			{
-				memory[i].writeToBlock(address, new Byte(inputData));
+				memory[i].writeByte(address, new Byte(inputData));
 				if (memory[i].getWritePolicy())
 					break;
 			}
@@ -87,20 +90,43 @@ public class Memory
 		
 		if (i == memory.length)
 			mainMemory.writeByte(address, new Byte(inputData));
+		
+		readData(address);
 	}
+//	}}
 	
 	private int reBuildAddress(int tag, int index, int cacheIndex)
 	{
 		int indexBits = (int) Math.ceil(Math.log(memory[cacheIndex].getNoSets()) / Math.log(2));
 		int offsetBits = (int) Math.ceil(Math.log(memory[cacheIndex].getsizeOfBlock()) / Math.log(2));
 		return (((tag << indexBits) | index) << offsetBits) | 0;
+	}	
+
+	public String toString()
+	{
+		String output = "";
+		
+		for (int i = 0; i < memory.length; i++)
+		{
+			output += "\nCache Level: " + (i + 1) + ", Cache Size:" + memory[i].getSize() + 
+					" Bytes, Block Size: " + memory[i].getsizeOfBlock() + " Bytes, " +
+					memory[i].getmWay() + "-way structure, Access Time: " + 
+					memory[i].getAccessDataCycles() + " Cycles, and Write Policy: " + 
+					((memory[i].getWritePolicy())? "Write Back" : "Write Through") + "\n\n";
+			
+			output += memory[i];
+		}
+		
+//		output += mainMemory;
+		
+		return output;
 	}
 	
 	public static void main(String[] args)
 	{
 		Memory tstMem = new Memory(32, 4, 2, false, 20, 64, 8, 4, false, 20, 128, 16, 4, false, 20);
 		
-		for (int i = 0, j  = 0; i < 65535; i++, j++)
+		for (int i = 0, j  = 0; i < 32767; i++, j++)
 		{
 			if (j > 127)
 				j = 0;
@@ -152,10 +178,11 @@ public class Memory
 		System.out.println(tstMem.readData(24));
 		System.out.println(tstMem.readData(25));
 		tstMem.writeData(30, 99);
-		System.out.println(tstMem.readData(30));
-		System.out.println(tstMem.memory[0]);
-		System.out.println(tstMem.memory[1]);
-		System.out.println(tstMem.memory[2]);
-		System.out.println(tstMem.memory.length);
+//		System.out.println(tstMem.readData(30));
+//		System.out.println(tstMem.memory[0]);
+//		System.out.println(tstMem.memory[1]);
+//		System.out.println(tstMem.memory[2]);
+//		System.out.println(tstMem.memory.length);
+		System.out.println(tstMem);
 	}
 }
