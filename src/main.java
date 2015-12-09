@@ -28,6 +28,7 @@ public class main {
 
 	// Processor Variables
 	static int PC = 0;
+	static int tempPC = 0;
 	static int cycle;
 	static boolean writing;
 	static boolean committing;
@@ -49,10 +50,12 @@ public class main {
 	static ReservationStations RS = new ReservationStations();
 
 	public static void main(String[] args) {
+		PC = 0;
 		cycle = 1;
 		addLatency = 1;
 		subLatency = 2;
 		mulLatency = 1;
+		beqLatency = 1;
 		registerFile.getRegister(1).setdata(1);
 		registerFile.getRegister(2).setdata(2);
 		registerFile.getRegister(3).setdata(3);
@@ -60,14 +63,22 @@ public class main {
 		registerFile.getRegister(5).setdata(5);
 
 		Instruction i = new Instruction("ADD", 1, 2, 3);
-		Instruction j = new Instruction("MUL", 3, 1, 4);
-		Instruction k = new Instruction("ADD", 5, 2, 4);
-		Instruction[] ins = { i, j, k };
-		while (cycle < 10) {
-			// while (ins[2].getCommitted() == 0) {
+		Instruction j = new Instruction("ADDI", 3, 1, 1);
+		Instruction k = new Instruction("MUL", 5, 2, 4);
+		Instruction m = new Instruction("ADD", 2, 2, 4);
+		Instruction[] ins = { i, j, k, m };
+		boolean issued;
+//		while (cycle < 10) {
+		while (ins[3].getCommitted() == 0) {
+			writing = false;
+			committing = false;
+			issued = false;
 			for (int l = 0; l < ins.length; l++) {
 				if (ins[l].getIssued() == 0) {
+					 if(!issued){
 					Tomasulo.issue(ins[l]);
+					issued = true;
+					 }
 				} else {
 					if (ins[l].getExecuted() == 0) {
 						Tomasulo.execute(ins[l]);
@@ -95,19 +106,27 @@ public class main {
 			rob.tostring();
 			System.out.println("Reservation Stations: ");
 			RS.tostring();
-			for (int l = 0; l < ins.length; l++)
-			{
-			System.out.println(l
-					+ ": "
-					+ main.registerFile.getRegister(ins[l].getDestReg())
-							.getstatus());
+			for (int l = 0; l < ins.length; l++) {
+				System.out.println(l
+						+ ": DestReg: "
+						+ main.registerFile.getRegister(ins[l].getDestReg())
+								.getstatus());
+				System.out.println(l + ": issued: " + ins[l].getIssued()
+						+ ", executed: " + ins[l].getExecuted() + ", written: "
+						+ ins[l].getWritten() + ", committed: "
+						+ ins[l].getCommitted());
 			}
 			System.out.println("*******");
-			System.out.println("R1 : " + main.registerFile.getRegister(1).getdata());
-			System.out.println("R2 : " + main.registerFile.getRegister(2).getdata());
-			System.out.println("R3 : " + main.registerFile.getRegister(3).getdata());
-			System.out.println("R4 : " + main.registerFile.getRegister(4).getdata());
-			System.out.println("R5 : " + main.registerFile.getRegister(5).getdata());
+			System.out.println("R1 : "
+					+ main.registerFile.getRegister(1).getdata());
+			System.out.println("R2 : "
+					+ main.registerFile.getRegister(2).getdata());
+			System.out.println("R3 : "
+					+ main.registerFile.getRegister(3).getdata());
+			System.out.println("R4 : "
+					+ main.registerFile.getRegister(4).getdata());
+			System.out.println("R5 : "
+					+ main.registerFile.getRegister(5).getdata());
 			System.out.println("*******");
 			System.out.println(" ");
 			System.out.println(" ");

@@ -5,6 +5,50 @@ public class Tomasulo {
 		if (checkRS || checkROB)
 			return;
 
+		// RS modification
+		ReservationStation s = main.RS.getRSbyFU(ins.getFU());
+		ins.setRSIndex(main.RS.getIndexbyFU(ins.getFU()));
+		s.setOp(ins.getOp());
+		s.setBusy(true);
+		s.setDest(main.rob.getTail() - 1);
+		s.setVj(main.registerFile.getRegister(ins.getSrcReg()));
+
+		// 
+		if (ins.getOp() == "BEQ") {
+			main.rob.setRob(main.rob.getTail() - 1, ins.getOp(), -1, 0, false);
+			s.setVj(main.registerFile.getRegister(ins.getDestReg()));
+			s.setVk(main.registerFile.getRegister(ins.getSrcReg()));
+			s.setA(ins.getImmediate());
+			if (ins.getImmediate() < 0) {
+				main.tempPC = main.PC;
+				main.PC++;
+			} else {
+				main.tempPC = main.PC;
+				main.PC += 1 + ins.getImmediate();
+			}
+			ins.setIssued(main.cycle);
+			return;
+		}
+
+		if (main.registerFile.getRegister(ins.getSrcReg()).getstatus() != -1) {
+			s.setQj(main.registerFile.getRegister(ins.getSrcReg()).getstatus());
+		}
+		if (ins.getSrcReg2() != -1) {
+			s.setVk(main.registerFile.getRegister(ins.getSrcReg2()));
+			if (main.registerFile.getRegister(ins.getSrcReg2()).getstatus() != -1) {
+				s.setQk(main.registerFile.getRegister(ins.getSrcReg2())
+						.getstatus());
+			}
+		} else {
+			if (ins.getOp() != "JALR" && ins.getOp() != "RET"
+					&& ins.getOp() != "LW" && ins.getOp() != "SW"
+					&& ins.getOp() != "BEQ") {
+				s.setVk(main.registerFile.getRegister(ins.getImmediate()));
+			}
+		}
+		if (ins.getOp() == "LW" || ins.getOp() == "SW") {
+			s.setA(ins.getImmediate());
+		}
 		// ROB modification
 		main.rob.incTail();
 		main.rob.setRob(main.rob.getTail() - 1, ins.getOp(), ins.getDestReg(),
@@ -18,32 +62,6 @@ public class Tomasulo {
 											// tail
 											// before
 		ins.setROBIndex(main.rob.getTail() - 1);
-
-		// RS modification
-		ReservationStation s = main.RS.getRSbyFU(ins.getFU());
-		ins.setRSIndex(main.RS.getIndexbyFU(ins.getFU()));
-		s.setOp(ins.getOp());
-		s.setBusy(true);
-		s.setDest(main.rob.getTail() - 1);
-		s.setVj(main.registerFile.getRegister(ins.getSrcReg()));
-		if (main.registerFile.getRegister(ins.getSrcReg()).getstatus() != -1) {
-			s.setQj(main.registerFile.getRegister(ins.getSrcReg()).getstatus());
-		}
-		if (ins.getSrcReg2() != -1) {
-			s.setVk(main.registerFile.getRegister(ins.getSrcReg2()));
-			if (main.registerFile.getRegister(ins.getSrcReg2()).getstatus() != -1) {
-				s.setQk(main.registerFile.getRegister(ins.getSrcReg2())
-						.getstatus());
-			}
-		} else {
-			if (ins.getOp() != "JALR" && ins.getOp() != "RET"
-					&& ins.getOp() != "LW" && ins.getOp() != "SW") {
-				s.setVk(main.registerFile.getRegister(ins.getImmediate()));
-			}
-		}
-		if (ins.getOp() == "LW" || ins.getOp() == "SW") {
-			s.setA(ins.getImmediate());
-		}
 		ins.setIssued(main.cycle);
 	}
 
@@ -53,14 +71,8 @@ public class Tomasulo {
 		int secondOperand = 0;
 		boolean useReg2 = false;
 		boolean useROB2 = false;
+
 		boolean useReg = main.RS.getRS(ins.getRSIndex()).getQj() == -1;
-		// boolean useReg = (main.registerFile.getRegister(ins.getSrcReg())
-		// .getstatus() == -1);
-		// boolean useROB =
-		// (main.registerFile.getRegister(ins.getSrcReg()).getstatus() != -1 &&
-		// main.rob
-		// .getRob(main.registerFile.getRegister(ins.getSrcReg())
-		// .getstatus()).isReady());
 		boolean useROB = (main.RS.getRS(ins.getRSIndex()).getQj() != -1 && main.rob
 				.getRob(main.registerFile.getRegister(ins.getSrcReg())
 						.getstatus()).isReady());
@@ -85,12 +97,6 @@ public class Tomasulo {
 				|| ins.getOp() == "MUL") {
 
 			useReg2 = main.RS.getRS(ins.getRSIndex()).getQk() == -1;
-			// useReg2 = (main.registerFile.getRegister(ins.getSrcReg2())
-			// .getstatus() == -1);
-			// useROB2 = (main.registerFile.getRegister(ins.getSrcReg2())
-			// .getstatus() != -1 && main.rob
-			// .getRob(main.registerFile.getRegister(ins.getSrcReg2())
-			// .getstatus()).isReady());
 			useROB2 = (main.RS.getRS(ins.getRSIndex()).getQk() != -1 && main.rob
 					.getRob(main.registerFile.getRegister(ins.getSrcReg2())
 							.getstatus()).isReady());
@@ -129,11 +135,11 @@ public class Tomasulo {
 				ins.setExecuted(main.cycle);
 				answer = firstOperand - secondOperand;
 				ins.setAnswer(answer);
-				if (answer == 0)
-					main.PC += 1 + ins.getImmediate();
-				else
-					main.PC += 1;
-				// TODO : Still needs to handle branch prediction
+				// if (answer == 0)
+				// main.PC += 1 + ins.getImmediate();
+				// else
+				// main.PC += 1;
+				// // TODO : Still needs to handle branch prediction
 				break;
 
 			case "JALR":
@@ -190,11 +196,13 @@ public class Tomasulo {
 			if (ins.getOp() == "ST") {
 				// memory handling
 				ins.setWritten(main.cycle);
+				main.writing = true;
 			} else {
 				main.rob.getRob(ins.getROBIndex()).setValue(ins.getAnswer());
 				main.rob.getRob(ins.getROBIndex()).setReady(true);
 				main.RS.removeFromRS(ins.getRSIndex());
 				ins.setWritten(main.cycle);
+				main.writing = true;
 			}
 		}
 
@@ -203,30 +211,68 @@ public class Tomasulo {
 	public static void commit(Instruction ins) {
 		if (!main.committing) {
 			if (ins.getROBIndex() == main.rob.getHead()) {
+				if (ins.getOp() == "BEQ") {
+					if (ins.getAnswer() == 0) {
+						if (ins.getImmediate() < 0) {
+							main.rob.flush();
+							main.PC = main.tempPC + ins.getImmediate();
+							main.committing = true;
+							ins.setCommitted(main.cycle);
+						} else {
+							main.rob.incHead();
+							main.rob.getRob(ins.getROBIndex()).setType("");
+							main.rob.getRob(ins.getROBIndex()).setDest(-1);
+							main.rob.getRob(ins.getROBIndex()).setValue(0);
+							main.rob.getRob(ins.getROBIndex()).setReady(false);
+							main.committing = true;
+							ins.setCommitted(main.cycle);
+						}
+					} else {
+						if (ins.getImmediate() < 0) {
+							main.rob.incHead();
+							main.rob.getRob(ins.getROBIndex()).setType("");
+							main.rob.getRob(ins.getROBIndex()).setDest(-1);
+							main.rob.getRob(ins.getROBIndex()).setValue(0);
+							main.rob.getRob(ins.getROBIndex()).setReady(false);
+							main.committing = true;
+							ins.setCommitted(main.cycle);
+						} else {
+							main.rob.flush();
+							main.PC = main.tempPC;
+							main.committing = true;
+							ins.setCommitted(main.cycle);
+						}
+					}
+				} else {
+					main.registerFile.getRegister(
+							main.rob.getRob(ins.getROBIndex()).getDest())
+							.setstatus(-1);
+					main.registerFile.getRegister(
+							main.rob.getRob(ins.getROBIndex()).getDest())
+							.setdata(
+									main.rob.getRob(ins.getROBIndex())
+											.getValue());
+					// RS modification: removing Qj and Qk values that is equal
+					// to
+					// the rob index removed
+					for (int i = 0; i < main.RS.getLength(); i++) {
+						if (main.RS.getRS(i).getQj() == ins.getROBIndex()) {
+							main.RS.getRS(i).setQj(-1);
+						}
+						if (main.RS.getRS(i).getQk() == ins.getROBIndex()) {
+							main.RS.getRS(i).setQk(-1);
+						}
+					}
 
-				main.registerFile.getRegister(
-						main.rob.getRob(ins.getROBIndex()).getDest())
-						.setstatus(-1);
-				main.registerFile.getRegister(
-						main.rob.getRob(ins.getROBIndex()).getDest()).setdata(
-						main.rob.getRob(ins.getROBIndex()).getValue());
-				//RS modification: removing Qj and Qk values that is equal to the rob index removed
-				for (int i = 0; i < main.RS.getLength(); i++) {
-					if(main.RS.getRS(i).getQj() == ins.getROBIndex()){
-						main.RS.getRS(i).setQj(-1);
-					}
-					if(main.RS.getRS(i).getQk() == ins.getROBIndex()){
-						main.RS.getRS(i).setQk(-1);
-					}
+					// ROB modification
+					main.rob.incHead();
+					main.rob.getRob(ins.getROBIndex()).setType("");
+					main.rob.getRob(ins.getROBIndex()).setDest(-1);
+					main.rob.getRob(ins.getROBIndex()).setValue(0);
+					main.rob.getRob(ins.getROBIndex()).setReady(false);
+					main.committing = true;
+					ins.setCommitted(main.cycle);
 				}
-				
-				//ROB modification
-				main.rob.incHead();
-				main.rob.getRob(ins.getROBIndex()).setType("");
-				main.rob.getRob(ins.getROBIndex()).setDest(-1);
-				main.rob.getRob(ins.getROBIndex()).setValue(0);
-				main.rob.getRob(ins.getROBIndex()).setReady(false);
-
 			}
 		}
 	}
