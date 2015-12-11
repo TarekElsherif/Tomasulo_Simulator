@@ -243,6 +243,7 @@ public class Memory
 					((instructionMemory[i].getWritePolicy())? "Write Back" : "Write Through") + "\n\n";
 			
 			output += instructionMemory[i];
+			
 		}
 		
 //		output += mainMemory;
