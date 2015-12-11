@@ -31,8 +31,8 @@ public class main {
 	static int cycle;
 	static boolean writing;
 	static boolean committing;
-	Memory memory = new Memory(S1, L1, M1, writePolicy1, writePolicy1,
-			accessTime1);
+//	Memory memory = new Memory(S1, L1, M1, writePolicy1, writePolicy1,
+//			accessTime1);
 
 	// Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1,
 	// accessTime1,
