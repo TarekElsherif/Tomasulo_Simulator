@@ -64,7 +64,7 @@ public class Cache
 	{
 		return noSets;
 	}
-	
+
 	public int getAccessDataCycles()
 	{
 		return accessDataCycles;
@@ -119,7 +119,7 @@ public class Cache
 			} 
 			else
 				buffer.clear();
-			
+
 			blocks[index][lru[index].get(0)].setBlock(bytes);
 			blocks[index][lru[index].get(0)].setValid(true);
 			blocks[index][lru[index].get(0)].setTag(tag);
@@ -138,7 +138,7 @@ public class Cache
 		int index = getIndex(address);
 		int tag = getTag(address);
 		int offset = getOffset(address);
-		
+
 		for (int i = 0; i < blocks[index].length; i++)
 		{
 			if (blocks[index][i].getTag() == tag)
@@ -151,11 +151,11 @@ public class Cache
 				return true;
 			}
 		}
-		
+
 		System.out.println("Block Not Found (Write Miss) - Cache Class");
 		return false;
 	}
-	
+
 	public boolean contains(int address)
 	{
 		int index = getIndex(address);
@@ -181,7 +181,7 @@ public class Cache
 		int offsetBits = (int) Math.ceil(Math.log(sizeOfBlock) / Math.log(2));
 		int indexBits = (int) Math.ceil((Math.log(noSets) / Math.log(2)));
 		int tag = address >>> (indexBits + offsetBits);
-			return tag;
+		return tag;
 	}
 
 	private int getOffset(int address)
@@ -200,34 +200,5 @@ public class Cache
 			output += "-----------------------\n";
 		}
 		return output;
-	}
-
-	public static void main(String[] args)
-	{
-		Byte test = new Byte();
-		test.setData(1);
-
-		Block tstBlck = new Block(4);
-		tstBlck.setByte(0, test);
-		tstBlck.setByte(1, new Byte(2));
-		tstBlck.setByte(2, new Byte(3));
-		tstBlck.setByte(3, new Byte(4));
-		tstBlck.setValid(true);
-		tstBlck.setDirty(false);
-		tstBlck.setTag(6);
-
-		Cache cacheTst = new Cache(32, 4, 2, true, 20);
-		cacheTst.placeBlock(0, tstBlck.getBlock());
-		cacheTst.placeBlock(1, tstBlck.getBlock());
-		cacheTst.placeBlock(2, tstBlck.getBlock());
-		cacheTst.placeBlock(3, tstBlck.getBlock());
-//		cacheTst.writeToBlock(0, 2, new Byte[] { new Byte(25), new Byte(30), new Byte(55), new Byte(90) });
-		System.out.println(cacheTst);
-		
-		
-//		int tst = 30;
-//		System.out.println("Tag: " + cacheTst.getTag(tst));
-//		System.out.println("Index: " + cacheTst.getIndex(tst));
-//		System.out.println("Offset: " + cacheTst.getOffset(tst));
 	}
 }

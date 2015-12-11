@@ -14,6 +14,10 @@ public class Instruction {
 	int answer;
 	String FU;
 
+	public Instruction()
+	{
+		op = "empty";
+	}
 
 	public Instruction(String op, int dest, int src, int unknown) {
 		issued = 0;
