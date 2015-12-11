@@ -1,9 +1,7 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class main {
+public class main
+{
 	// User Parameters
 
 	int cacheLevels = 1;
@@ -30,7 +28,7 @@ public class main {
 	static int beqLatency;
 	static int nandLatency;
 	static int mulLatency;
-	
+
 	// Simulator Outputs
 	int noOfCycles;
 	double IPC;
@@ -38,15 +36,15 @@ public class main {
 	int hitRatio2; // hit ratio of cache level 2
 	int hitRatio3; // hit ratio of cache level 3
 	double AMAT;
-	double bmp; // branch misprediction percentage
+	double bmp; // branch miss prediction percentage
 
 	// Processor Variables
 	static int PC = 0;
+	static int tempPC = 0;
 	static int cycle;
 	static boolean writing;
 	static boolean committing;
-	Memory memory = new Memory(S1, L1, M1, writePolicy1, writePolicy1,
-			accessTime1);
+	Memory memory = new Memory(S1, L1, M1, writePolicy1, accessTime1);
 
 	// Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1,
 	// accessTime1,
@@ -61,44 +59,68 @@ public class main {
 	static MainMemory mainMemory = new MainMemory();
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStations RS = new ReservationStations();
-	
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
+		PC = 0;
 		cycle = 1;
 		addLatency = 1;
 		subLatency = 2;
+		mulLatency = 2;
+		beqLatency = 1;
 		registerFile.getRegister(1).setdata(1);
 		registerFile.getRegister(2).setdata(2);
 		registerFile.getRegister(3).setdata(3);
 		registerFile.getRegister(4).setdata(4);
 		registerFile.getRegister(5).setdata(5);
-		
-		Parser p = new Parser(); // Parser reads input from instructions.txt and data.txt
+		registerFile.getRegister(6).setdata(6);
+
+		Parser p = new Parser(); // Parser reads input from instructions.txt and
+									// data.txt
 		ArrayList<Instruction> ins = p.getInstructions(); // Instructions input
 		ArrayList<Byte> data = p.getBytes(); // Data input
 		int ins_a = p.getInsAddress(); // Memory address of instructions
 		int data_a = p.getDataAddress(); // Memory address of data
-		
-		// Initialize memory
-		//Memory mem = new Memory();
 
-//		Instruction i = new Instruction("ADD", 1, 2, 3);
-//		Instruction j = new Instruction("SUB", 3, 1, 4);
-//		Instruction k = new Instruction("ADD", 5, 2, 4);
-		//Instruction[] ins = { i, j, k };
-		while (cycle < 10) {
-			// while (ins[2].getCommitted() == 0) {
-			for (int l = 0; l < ins.size(); l++) {
-				if (ins.get(l).getIssued() == 0) {
-					Tomasulo.issue(ins.get(l));
-				} else {
-					if (ins.get(l).getExecuted() == 0) {
+		// Initialize memory
+		// Memory mem = new Memory();
+
+		// Instruction i = new Instruction("ADD", 1, 2, 3);
+		// Instruction j = new Instruction("ADDI", 3, 1, 1);
+		// Instruction k = new Instruction("MUL", 5, 2, 4);
+		// Instruction m = new Instruction("ADD", 2, 2, 4);
+		// Instruction[] ins = { i, j, k, m };
+		boolean issued;
+		// while (cycle < 10) {
+		while (ins.get(ins.size() - 1).getCommitted() == 0)
+		{
+			writing = false;
+			committing = false;
+			issued = false;
+			for (int l = 0; l < ins.size(); l++)
+			{
+				if (ins.get(l).getIssued() == 0)
+				{
+					if (!issued)
+					{
+						Tomasulo.issue(ins.get(l));
+						issued = true;
+					}
+
+				} else
+				{
+					if (ins.get(l).getExecuted() == 0)
+					{
 						Tomasulo.execute(ins.get(l));
-					} else {
-						if (ins.get(l).getWritten() == 0) {
+					} else
+					{
+						if (ins.get(l).getWritten() == 0)
+						{
 							Tomasulo.writeBack(ins.get(l));
-						} else {
-							if (ins.get(l).getCommitted() == 0) {
+						} else
+						{
+							if (ins.get(l).getCommitted() == 0)
+							{
 								Tomasulo.commit(ins.get(l));
 							}
 						}
@@ -118,12 +140,14 @@ public class main {
 			rob.tostring();
 			System.out.println("Reservation Stations: ");
 			RS.tostring();
+
 			for (int l = 0; l < ins.size(); l++)
 			{
-			System.out.println(l
-					+ ": "
-					+ main.registerFile.getRegister(ins.get(l).getDestReg())
-							.getstatus());
+				System.out.println(
+						l + ": DestReg: " + main.registerFile.getRegister(ins.get(l).getDestReg()).getstatus());
+				System.out.println(l + ": issued: " + ins.get(l).getIssued() + ", executed: " + ins.get(l).getExecuted()
+						+ ", written: " + ins.get(l).getWritten() + ", committed: " + ins.get(l).getCommitted());
+
 			}
 			System.out.println("*******");
 			System.out.println("R1 : " + main.registerFile.getRegister(1).getdata());
@@ -135,13 +159,13 @@ public class main {
 			System.out.println(" ");
 			System.out.println(" ");
 			System.out.println(" ");
-			// System.out.println("the answer: " + ins[l].getAnswer());
+			 System.out.println("the answer: " + ins.get().getAnswer());
 			// System.out.println("the ROB index: " + ins[l].getRSIndex());
 			// System.out.println("the RS index: " + ins[l].getROBIndex());
 			cycle++;
 		}
 		// }
-		
+
 		// Simulator Outputs
 		System.out.println();
 	}

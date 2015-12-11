@@ -1,17 +1,8 @@
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
-import org.omg.CORBA.portable.InputStream;
 
 public class Parser {
 
@@ -87,6 +78,7 @@ public class Parser {
 		String ins = regs[0];
 		// reg1 = s[1].replaceAll("[^\\d.]", "");
 		switch (regs[0]) {
+		//TODO: Check if an Instruction Op is wrong
 		case "LW":
 			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
 			String[] spl = regs[2].split("R");
@@ -145,6 +137,7 @@ public class Parser {
 		case "ADDI":
 			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
 			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
+			//TODO: Check if Par3 is ONLY a number or not
 			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
 			break;
 

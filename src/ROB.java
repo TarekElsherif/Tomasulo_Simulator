@@ -77,5 +77,14 @@ public class ROB {
 			System.out.println(rob[i].isReady());
 		}
 	}
+	public void flush() {
+		for (int i = 0; i < rob.length; i++) {
+			rob[i].setType("");
+			rob[i].setDest(-1);
+			rob[i].setValue(0);
+			rob[i].setReady(false);
+		}
+	}
+	
 
 }

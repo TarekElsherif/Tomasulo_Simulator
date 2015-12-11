@@ -33,6 +33,7 @@ public class ReservationStations {
 
 	public void removeFromRS(int i) {
 		RS[i].setBusy(false);
+		RS[i].setOp(null);
 		RS[i].setVj(null);
 		RS[i].setVk(null);
 		RS[i].setQj(-1);
@@ -56,5 +57,8 @@ public class ReservationStations {
 			System.out.print(RS[i].getDest() + ", ");
 			System.out.println(RS[i].getA());
 		}
+	}
+	public int getLength(){
+		return RS.length;
 	}
 }
