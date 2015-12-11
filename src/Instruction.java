@@ -14,7 +14,11 @@ public class Instruction {
 	int answer;
 	String FU;
 
-
+	public Instruction()
+	{
+		op = "empty";
+	}
+	
 	public Instruction(String op, int dest, int src, int unknown) {
 		issued = 0;
 		executed = 0;
@@ -199,5 +203,9 @@ public class Instruction {
 	public void setFU(String fU) {
 		FU = fU;
 	}
-
+	
+	public String toString()
+	{
+		return "[" + op + "]";
+	}
 }
