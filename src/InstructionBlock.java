@@ -1,21 +1,21 @@
-public class Block
+public class InstructionBlock
 {
 	private boolean valid;
 	private boolean dirty;
 	private int tag;
 	private int size;
-	private Byte[] block;
+	private Instruction[] block;
 
-	public Block(int sizeOfBlock)
+	public InstructionBlock(int sizeOfBlock)
 	{
 		size = sizeOfBlock;
 		valid = false;
 		dirty = false;
 		tag = 0;
-		block = new Byte[size];
+		block = new Instruction[size];
 		
 		for (int i = 0; i < block.length; i++)
-			block[i] = new Byte();
+			block[i] = new Instruction();
 	}
 
 	public boolean isValid()
@@ -48,22 +48,22 @@ public class Block
 		this.tag = tag;
 	}
 	
-	public Byte getByte(int offset)
+	public Instruction getInstruction(int offset)
 	{
 		return block[offset];
 	}
 
-	public void setByte(int offset, Byte input)
+	public void setInstruction(int offset, Instruction input)
 	{
 		this.block[offset] = input;
 	}
 
-	public Byte[] getBlock()
+	public Instruction[] getBlock()
 	{
 		return block;
 	}
 
-	public void setBlock(Byte[] block)
+	public void setBlock(Instruction[] block)
 	{
 		this.block = block;
 	}
