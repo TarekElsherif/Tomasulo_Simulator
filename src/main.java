@@ -78,10 +78,10 @@ public class main
 		Instruction m = new Instruction("ADD", 2, 2, 4);
 		Instruction[] ins = { v, j, k, m };
 
-//		for (int i = 0; i < insX.size(); i++)
-//		{
-//			insX.set(i, ins[i]);
-//		}
+		// for (int i = 0; i < insX.size(); i++)
+		// {
+		// insX.set(i, ins[i]);
+		// }
 
 		System.out.println(insX.size() + " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		for (int i = 0; i < ins.length; i++)
@@ -146,9 +146,11 @@ public class main
 			RS.tostring();
 			for (int l = 0; l < insX.size(); l++)
 			{
-				System.out.println(l + ": DestReg: " + main.registerFile.getRegister(insX.get(l).getDestReg()).getstatus());
-				System.out.println(l + ": issued: " + insX.get(l).getIssued() + ", executed: " + insX.get(l).getExecuted()
-						+ ", written: " + insX.get(l).getWritten() + ", committed: " + insX.get(l).getCommitted());
+				System.out.println(
+						l + ": DestReg: " + main.registerFile.getRegister(insX.get(l).getDestReg()).getstatus());
+				System.out.println(l + ": issued: " + insX.get(l).getIssued() + ", executed: "
+						+ insX.get(l).getExecuted() + ", written: " + insX.get(l).getWritten() + ", committed: "
+						+ insX.get(l).getCommitted());
 			}
 			System.out.println("*******");
 			System.out.println("R1 : " + main.registerFile.getRegister(1).getdata());
