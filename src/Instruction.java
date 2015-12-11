@@ -199,5 +199,9 @@ public class Instruction {
 	public void setFU(String fU) {
 		FU = fU;
 	}
+	
+	public String toString(){
+		return op + " R" + destReg + ", R" + srcReg + ", R" + srcReg2; 
+	}
 
 }

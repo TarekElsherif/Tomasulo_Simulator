@@ -29,15 +29,6 @@ public class main
 	static int nandLatency;
 	static int mulLatency;
 
-	// Simulator Outputs
-	int noOfCycles;
-	double IPC;
-	int hitRatio1; // hit ratio of cache level 1
-	int hitRatio2; // hit ratio of cache level 2
-	int hitRatio3; // hit ratio of cache level 3
-	double AMAT;
-	double bmp; // branch miss prediction percentage
-
 	// Processor Variables
 	static int PC = 0;
 	static int tempPC = 0;
@@ -66,62 +57,75 @@ public class main
 		cycle = 1;
 		addLatency = 1;
 		subLatency = 2;
-		mulLatency = 2;
+		mulLatency = 1;
 		beqLatency = 1;
 		registerFile.getRegister(1).setdata(1);
-		registerFile.getRegister(2).setdata(2);
+		registerFile.getRegister(2).setdata(40);
 		registerFile.getRegister(3).setdata(3);
-		registerFile.getRegister(4).setdata(4);
+		registerFile.getRegister(4).setdata(60);
 		registerFile.getRegister(5).setdata(5);
-		registerFile.getRegister(6).setdata(6);
 
 		Parser p = new Parser(); // Parser reads input from instructions.txt and
 									// data.txt
-		ArrayList<Instruction> ins = p.getInstructions(); // Instructions input
+		ArrayList<Instruction> insX = p.getInstructions(); // Instructions input
 		ArrayList<Byte> data = p.getBytes(); // Data input
 		int ins_a = p.getInsAddress(); // Memory address of instructions
 		int data_a = p.getDataAddress(); // Memory address of data
 
-		// Initialize memory
-		// Memory mem = new Memory();
+		Instruction v = new Instruction("ADD", 1, 2, 3);
+		Instruction j = new Instruction("ADDI", 3, 1, 1);
+		Instruction k = new Instruction("MUL", 5, 2, 4);
+		Instruction m = new Instruction("ADD", 2, 2, 4);
+		Instruction[] ins = { v, j, k, m };
 
-		// Instruction i = new Instruction("ADD", 1, 2, 3);
-		// Instruction j = new Instruction("ADDI", 3, 1, 1);
-		// Instruction k = new Instruction("MUL", 5, 2, 4);
-		// Instruction m = new Instruction("ADD", 2, 2, 4);
-		// Instruction[] ins = { i, j, k, m };
+//		for (int i = 0; i < insX.size(); i++)
+//		{
+//			insX.set(i, ins[i]);
+//		}
+
+		System.out.println(insX.size() + " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		for (int i = 0; i < ins.length; i++)
+		{
+			System.out.println(ins[i]);
+		}
+		System.out.println("");
+
+		for (int i = 0; i < insX.size(); i++)
+		{
+			System.out.println(insX.get(i));
+		}
+
 		boolean issued;
 		// while (cycle < 10) {
-		while (ins.get(ins.size() - 1).getCommitted() == 0)
+		while (insX.get(insX.size() - 1).getCommitted() == 0)
 		{
 			writing = false;
 			committing = false;
 			issued = false;
-			for (int l = 0; l < ins.size(); l++)
+			for (int l = 0; l < insX.size(); l++)
 			{
-				if (ins.get(l).getIssued() == 0)
+				if (insX.get(l).getIssued() == 0)
 				{
 					if (!issued)
 					{
-						Tomasulo.issue(ins.get(l));
+						Tomasulo.issue(insX.get(l));
 						issued = true;
 					}
-
 				} else
 				{
-					if (ins.get(l).getExecuted() == 0)
+					if (insX.get(l).getExecuted() == 0)
 					{
-						Tomasulo.execute(ins.get(l));
+						Tomasulo.execute(insX.get(l));
 					} else
 					{
-						if (ins.get(l).getWritten() == 0)
+						if (insX.get(l).getWritten() == 0)
 						{
-							Tomasulo.writeBack(ins.get(l));
+							Tomasulo.writeBack(insX.get(l));
 						} else
 						{
-							if (ins.get(l).getCommitted() == 0)
+							if (insX.get(l).getCommitted() == 0)
 							{
-								Tomasulo.commit(ins.get(l));
+								Tomasulo.commit(insX.get(l));
 							}
 						}
 					}
@@ -140,14 +144,11 @@ public class main
 			rob.tostring();
 			System.out.println("Reservation Stations: ");
 			RS.tostring();
-
-			for (int l = 0; l < ins.size(); l++)
+			for (int l = 0; l < insX.size(); l++)
 			{
-				System.out.println(
-						l + ": DestReg: " + main.registerFile.getRegister(ins.get(l).getDestReg()).getstatus());
-				System.out.println(l + ": issued: " + ins.get(l).getIssued() + ", executed: " + ins.get(l).getExecuted()
-						+ ", written: " + ins.get(l).getWritten() + ", committed: " + ins.get(l).getCommitted());
-
+				System.out.println(l + ": DestReg: " + main.registerFile.getRegister(insX.get(l).getDestReg()).getstatus());
+				System.out.println(l + ": issued: " + insX.get(l).getIssued() + ", executed: " + insX.get(l).getExecuted()
+						+ ", written: " + insX.get(l).getWritten() + ", committed: " + insX.get(l).getCommitted());
 			}
 			System.out.println("*******");
 			System.out.println("R1 : " + main.registerFile.getRegister(1).getdata());
@@ -159,14 +160,11 @@ public class main
 			System.out.println(" ");
 			System.out.println(" ");
 			System.out.println(" ");
-			 System.out.println("the answer: " + ins.get().getAnswer());
+			// System.out.println("the answer: " + ins[l].getAnswer());
 			// System.out.println("the ROB index: " + ins[l].getRSIndex());
 			// System.out.println("the RS index: " + ins[l].getROBIndex());
 			cycle++;
 		}
-		// }
-
-		// Simulator Outputs
-		System.out.println();
 	}
+	// }
 }

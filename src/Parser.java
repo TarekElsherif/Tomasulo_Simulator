@@ -114,20 +114,8 @@ public class Parser {
 			break;
 
 		case "ADD":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
-			break;
 		case "SUB":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
-			break;
 		case "NAND":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
-			break;
 		case "MUL":
 			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
 			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
