@@ -10,6 +10,7 @@ public class MainMemory
 	{
 		for (int i = 0; i < dataMemory.length; i++)
 			dataMemory[i] = new Byte();
+		
 		for (int i = 0; i < instructionMemory.length; i++)
 			instructionMemory[i] = new Instruction();
 	}
@@ -19,7 +20,6 @@ public class MainMemory
 	{
 		accessTime = memoryAccess;
 		instructionStartAddress /= 2;
-		
 		for (int i = 0; i < dataMemory.length; i++)
 			dataMemory[i] = new Byte();
 		for (int i = 0; i < instructionMemory.length; i++)
@@ -29,6 +29,9 @@ public class MainMemory
 			dataMemory[dataStartAddress + i] = new Byte(mainData.get(i));
 		for (int i = 0; i < instructions.size(); i++)
 			instructionMemory[instructionStartAddress + i] = instructions.get(i);
+		
+
+		dataMemory[40].setData(75);
 	}
 		
 	public Byte readByte(int address)

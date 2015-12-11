@@ -29,11 +29,13 @@ public class Instruction {
 		srcReg = src;
 		switch (op) {
 		case "LW":
+			cyclesLeft = -1;
 			immediate = unknown;
 			FU = "LOAD";
 			break;
 
 		case "SW":
+			cyclesLeft = -1;
 			immediate = unknown;
 			FU = "STORE";
 			break;

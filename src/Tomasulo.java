@@ -113,6 +113,26 @@ public class Tomasulo {
 				secondOperand = main.rob.getRob(ins.getROBIndex()).getValue();
 			}
 		}
+		if (ins.getCyclesLeft() == -1) {
+			if (ins.getOp() == "LW") {
+				ins.setAnswer(main.memory.readData(firstOperand + secondOperand));
+//				System.out.println(firstOperand);
+//				System.out.println(secondOperand);
+//				System.out.println("Address:  " + (firstOperand + secondOperand));
+//				System.out.println("Answer  " + main.memory.readData(firstOperand + secondOperand));
+				System.out.println("1st " + firstOperand);
+				System.out.println("2nd " + secondOperand);
+			}
+			if (ins.getOp() == "SW") {
+				main.memory.writeData(firstOperand + secondOperand,
+						main.registerFile.getRegister(ins.getDestReg()).getdata());
+			}			
+			int tmp = main.memory.getLatestAccessTime();
+			ins.setCyclesLeft(tmp);
+			System.out.println("TMP: " + tmp);
+			ins.cyclesLeft++;
+
+		}
 		if (ins.cyclesLeft <= 1) {
 			switch (ins.getOp()) {
 			case "LW":
@@ -122,7 +142,6 @@ public class Tomasulo {
 
 			case "SW":
 				// TODO : call the read and write methods from memory
-
 				ins.setExecuted(main.cycle);
 				break;
 
