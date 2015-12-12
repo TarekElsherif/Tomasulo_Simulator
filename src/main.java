@@ -54,15 +54,6 @@ public class main {
 	
 	static Memory memory = new Memory(S1, L1, M1, writePolicy1, accessTime1, mainMemoryAccessTime, data, data_a, insX, ins_a);
 
-	// Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1,
-	// accessTime1,
-	// S2, L2 , M2, writePolicy2, writePolicy2, accessTime2);
-
-	// Memory memory = new Memory(S1, L1 , M1, writePolicy1, writePolicy1,
-	// accessTime1,
-	// S2, L2 , M2, writePolicy2, writePolicy2, accessTime2,
-	// S3, L3 , M3, writePolicy3, writePolicy3, accessTime3);
-
 	static RegisterFile registerFile = new RegisterFile();
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStations RS = new ReservationStations();
