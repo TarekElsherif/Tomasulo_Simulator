@@ -39,6 +39,18 @@ public class ReservationStations {
 		RS[i].setQj(-1);
 		RS[i].setQk(-1);
 		RS[i].setDest(-1);
+		RS[i].setA(0);
+	}
+	public void flush() {
+		for (int i = 0; i < RS.length; i++) {
+		RS[i].setBusy(false);
+		RS[i].setOp(null);
+		RS[i].setVj(null);
+		RS[i].setVk(null);
+		RS[i].setQj(-1);
+		RS[i].setQk(-1);
+		RS[i].setDest(-1);
+		}
 	}
 
 	public void tostring() {

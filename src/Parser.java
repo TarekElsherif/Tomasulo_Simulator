@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Parser {
 
 	private ArrayList<Instruction> instructions;
-	private ArrayList<Byte> bytes;
+	private ArrayList<Integer> bytes;
 	private int insAddress;
 	private int dataAddress;
 	private int noOfCaches;
@@ -150,10 +150,10 @@ public class Parser {
 
 	}
 
-	public ArrayList<Byte> bufferToByte(String[] s) {
-		ArrayList<Byte> result = new ArrayList<Byte>();
+	public ArrayList<Integer> bufferToByte(String[] s) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
 		for (int i = 0; i < s.length; i++) {
-			Byte b = new Byte(Integer.parseInt(s[i].replaceAll("[^\\d.]", "")));
+			Integer b = new Integer(Integer.parseInt(s[i].replaceAll("[^\\d.]", "")));
 			result.add(b);
 		}
 		return result;
@@ -173,7 +173,7 @@ public class Parser {
 					+ x.getImmediate());
 		}
 		for (int j = 0; j < p.bytes.size(); j++) {
-			System.out.println(p.bytes.get(j).getData());
+			System.out.println(p.bytes.get(j));
 		}
 	}
 
@@ -185,11 +185,11 @@ public class Parser {
 		this.instructions = instructions;
 	}
 
-	public ArrayList<Byte> getBytes() {
+	public ArrayList<Integer> getBytes() {
 		return bytes;
 	}
 
-	public void setBytes(ArrayList<Byte> bytes) {
+	public void setBytes(ArrayList<Integer> bytes) {
 		this.bytes = bytes;
 	}
 
