@@ -119,20 +119,17 @@ public class Tomasulo {
 		if (ins.getCyclesLeft() == -1) {
 			if (ins.getOp().equals("LW")) {
 				ins.setAnswer(main.memory.readData(firstOperand + secondOperand));
+				ins.setCyclesLeft(main.LOADlatency + main.memory.getLatestAccessTime() + 1);
+				//+1 for calculating the offset
 			}
 			if (ins.getOp().equals("SW")) {
-//				System.out.println("Address: " + (main.registerFile.getRegister(ins.getDestReg()).getdata() 
-//						+ secondOperand));
-//				System.out.println("Data: " + firstOperand);
 				main.memory.writeData(
 						main.registerFile.getRegister(ins.getDestReg()).getdata() + secondOperand,
 						firstOperand);
-//				System.out.println("Load: " + main.memory.readData(1));
 				ins.setAnswer(firstOperand);
+				ins.setCyclesLeft(main.STORElatency + main.memory.getLatestAccessTime() + 1);
+				//+1 for calculating the offset
 			}			
-			ins.setCyclesLeft(main.memory.getLatestAccessTime());
-			ins.cyclesLeft++;
-
 		}
 		if (ins.cyclesLeft <= 1) {
 			switch (ins.getOp()) {
