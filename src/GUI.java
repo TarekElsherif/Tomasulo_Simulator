@@ -39,6 +39,8 @@ public class GUI {
 	public static JTextField L1AccessTime;
 	public static JTextField L2AccessTime;
 	public static JTextField L3AccessTime;
+	public static JTextPane ProgramText;
+	public static JTextPane DataText;
 	public static boolean L1Selected=false;
 	public static boolean L2Selected=false;
 	public static boolean L3Selected=false;
@@ -93,10 +95,10 @@ public class GUI {
 		ProgramLable.setBounds(10, 11, 71, 14);
 		ProgramPanel.add(ProgramLable);
 		
-		JTextPane s = new JTextPane();
-		s.setToolTipText("");
-		s.setBounds(10, 36, 172, 143);
-		ProgramPanel.add(s);
+		ProgramText = new JTextPane();
+		ProgramText.setToolTipText("");
+		ProgramText.setBounds(10, 36, 172, 143);
+		ProgramPanel.add(ProgramText);
 		
 		JPanel DataPanel = new JPanel();
 		DataPanel.setBackground(new Color(100, 149, 237));
@@ -108,7 +110,7 @@ public class GUI {
 		DataLable.setBounds(10, 11, 46, 14);
 		DataPanel.add(DataLable);
 		
-		JTextPane DataText = new JTextPane();
+		DataText = new JTextPane();
 		DataText.setBounds(10, 36, 198, 142);
 		DataPanel.add(DataText);
 		

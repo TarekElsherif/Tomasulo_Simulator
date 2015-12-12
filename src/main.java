@@ -166,17 +166,13 @@ public class main {
 		
 		PC = 0;
 		cycle = 1;
-		LOADlatency = 1;
-		STORElatency = 2;
-		INTlatency = 1;
-		MULTlatency = 1;
 		registerFile.getRegister(1).setdata(1);
 		registerFile.getRegister(2).setdata(40);
 		registerFile.getRegister(3).setdata(3);
 		registerFile.getRegister(4).setdata(60);
 		registerFile.getRegister(5).setdata(5);
 
-		Parser p = new Parser(); // Parser reads input from instructions.txt and
+		Parser p = new Parser(GUI.ProgramText.getText(),GUI.DataText.getText()); // Parser reads input from instructions.txt and
 									// data.txt
 		ArrayList<Instruction> insX = p.getInstructions(); // Instructions input
 		ArrayList<Byte> data = p.getBytes(); // Data input
