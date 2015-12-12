@@ -1,17 +1,2 @@
-/Block.class
-/Byte.class
-/Cache.class
-/Instruction.class
-/InstructionBlock.class
-/InstructionCache.class
-/MainMemory.class
-/Memory.class
-/Parser.class
-/ROB.class
-/ROBentry.class
-/Register.class
-/RegisterFile.class
 /ReservationStation.class
 /ReservationStations.class
-/Tomasulo.class
-/main.class
