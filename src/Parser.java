@@ -16,7 +16,7 @@ public class Parser {
 	private int[] mWay;
 	private boolean[] writeBack;
 	private int[] accessTime;
-	
+
 	public Parser() {
 		String i = "";
 		String d = "";
@@ -43,9 +43,9 @@ public class Parser {
 		instructions = bufferToInstructions(Arrays.copyOfRange(ins, 1,
 				ins.length));
 		bytes = bufferToByte(Arrays.copyOfRange(data, 1, data.length));
-		
+
 	}
-	
+
 	public Parser(String i, String d) {
 		String[] ins = i.split("\n");
 		String[] data = d.split("\n");
@@ -77,60 +77,74 @@ public class Parser {
 		String[] regs = s.split(" ");
 		String ins = regs[0];
 		// reg1 = s[1].replaceAll("[^\\d.]", "");
-		switch (regs[0]) {
-		//TODO: Check if an Instruction Op is wrong
-		case "LW":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			String[] spl = regs[2].split("R");
-			par2 = Integer.parseInt(spl[1].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(spl[0].replaceAll("[^\\d.]", ""));
-			break;
+		try {
+			switch (regs[0]) {
+			// TODO: Check if an Instruction Op is wrong
+			case "LW":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				String[] spl = regs[2].split("R");
+				par2 = Integer.parseInt(spl[1].replaceAll("[^\\d.]", ""));
+				par3 = Integer.parseInt(spl[0].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "SW":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			String[] spl1 = regs[2].split("R");
-			par2 = Integer.parseInt(spl1[1].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(spl1[0].replaceAll("[^\\d.]", ""));
-			break;
+			case "SW":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				String[] spl1 = regs[2].split("R");
+				par2 = Integer.parseInt(spl1[1].replaceAll("[^\\d.]", ""));
+				par3 = Integer.parseInt(spl1[0].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "JMP":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			break;
+			case "JMP":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				par3 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "BEQ":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
-			break;
+			case "BEQ":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
+				par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "JALR":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			break;
+			case "JALR":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "RET":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			break;
+			case "RET":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "ADD":
-		case "SUB":
-		case "NAND":
-		case "MUL":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
-			break;
+			case "ADD":
+			case "SUB":
+			case "NAND":
+			case "MUL":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
+				par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
+				break;
 
-		case "ADDI":
-			par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
-			par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
-			//TODO: Check if Par3 is ONLY a number or not
-			par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
-			break;
+			case "ADDI":
+				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
+				par2 = Integer.parseInt(regs[2].replaceAll("[^\\d.]", ""));
+				// TODO: Check if Par3 is ONLY a number or not
+				// .replaceAll("[^\\d.]", "") replaces all non-numerical chars
+				// in
+				// the string
+				par3 = Integer.parseInt(regs[3].replaceAll("[^\\d.]", ""));
+				break;
 
-		default:
-			break;
+			default:
+				System.out.println("Syntax Error - Parser");
+				break;
+			}
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.out
+					.println("Parsing Error; Make sure to add spaces between Register names in instruction.txt.");
+			return null;
+		}
+		if (par1 == 0) {
+			System.out.println("You can not write in Register R0. - Parser");
+			return null;
 		}
 		return new Instruction(ins, par1, par2, par3);
 
@@ -151,15 +165,11 @@ public class Parser {
 	}
 
 	public static void main(String[] args) throws IOException {
-		// String i = ".ORG 300\nLW R1, 24(R2)\nADD R3, R4, R5";
-//		String i = readFile("instructions.txt");
-//		String d = readFile("data.txt");
 		Parser p = new Parser();
-		// System.out.println(i);
 		for (int j = 0; j < p.instructions.size(); j++) {
 			Instruction x = p.instructions.get(j);
-			System.out.println(x.getOp() + " " + x.getDestReg() + " "
-					+ x.getSrcReg() + " " + x.getSrcReg2() + " "
+			System.out.println(x.getOp() + "," + x.getDestReg() + ","
+					+ x.getSrcReg() + "," + x.getSrcReg2() + ","
 					+ x.getImmediate());
 		}
 		for (int j = 0; j < p.bytes.size(); j++) {
@@ -198,6 +208,7 @@ public class Parser {
 	public void setInsAddress(int insAddress) {
 		this.insAddress = insAddress;
 	}
+
 	public void setNoOfCaches(int noOfCaches) {
 		this.noOfCaches = noOfCaches;
 	}
@@ -241,7 +252,7 @@ public class Parser {
 	public void setAccessTime(int[] accessTime) {
 		this.accessTime = accessTime;
 	}
-	
+
 	public int getNoOfCaches() {
 		return noOfCaches;
 	}
