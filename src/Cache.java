@@ -25,6 +25,10 @@ public class Cache
 			System.out.println("Size Of Block (L) Can't Be Zero - Cache Class");
 			return;
 		}
+		if (m == 0) {
+			System.out.println("Number of Ways (M) Can't Be Zero - Cache Class");
+			return;
+		}
 		sizeOfCache = s;
 		sizeOfBlock = l;
 		mWay = m;
