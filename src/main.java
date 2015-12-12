@@ -9,7 +9,7 @@ public class main
 	static int L1 = 16;
 	static int M1 = 2;
 	static boolean writePolicy1 = true;
-	static int accessTime1 = 0;
+	static int accessTime1 = 1;
 	static int S2;
 	static int L2;
 	static int M2;
@@ -21,7 +21,7 @@ public class main
 	static boolean writePolicy3;
 	static int accessTime3;
 	
-	static int mainMemoryAccessTime = 0;
+	static int mainMemoryAccessTime = 1;
 
 	static int ROBsize = 5;
 	static int addLatency;

@@ -5,7 +5,9 @@ public class Memory
 	private Cache[] memory;
 	private InstructionCache[] instructionMemory;
 	public MainMemory mainMemory;
-	private int latestcacheAccessTime = 0;
+	private double latestcacheAccessTime = 0;
+	private double noOfAccesses = 0;
+	private double totalAccessTime = 0;
 	
 //	{{Constructors
 	public Memory(int s, int l, int m, boolean WP, int cacheAccessTime
@@ -101,6 +103,8 @@ public class Memory
 				}
 			}
 		}
+		totalAccessTime += latestcacheAccessTime;
+		noOfAccesses++;
 		return memory[0].readByte(address).getData();
 	}
 	
@@ -186,6 +190,8 @@ public class Memory
 				}
 			}
 		}
+		totalAccessTime += latestcacheAccessTime;
+		noOfAccesses++;
 		return instructionMemory[0].readInstruction(address);
 	}
 	
@@ -226,11 +232,36 @@ public class Memory
 	
 	public int getLatestAccessTime()
 	{
-		int tmp = latestcacheAccessTime;
+		int tmp = (int) latestcacheAccessTime;
 		latestcacheAccessTime = 0;
 		return tmp;
 	}
-
+	
+	public double getAMAT()
+	{
+		return totalAccessTime/noOfAccesses;
+	}
+	
+	public double getDataHitRatio(int cacheLevel)
+	{
+		return memory[cacheLevel - 1].getHitRatio();
+	}
+	
+	public double getDataMissRatio(int cacheLevel)
+	{
+		return memory[cacheLevel - 1].getMissRatio();
+	}
+	
+	public double getInstructionHitRatio(int cacheLevel)
+	{
+		return instructionMemory[cacheLevel - 1].getHitRatio();
+	}
+	
+	public double getInstructionMissRatio(int cacheLevel)
+	{
+		return instructionMemory[cacheLevel - 1].getMissRatio();
+	}
+	
 	public String toString()
 	{
 		String output = "";
@@ -264,7 +295,6 @@ public class Memory
 		return output;
 	}
 	
-
 	public static void main(String[] args)
 	{
 		ArrayList<Integer> data = new ArrayList<Integer>();
