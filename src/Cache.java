@@ -14,6 +14,9 @@ public class Cache
 	private boolean writePolicy; // True (Write Back) & False (Write Through)
 	private ArrayList<Integer>[] lru;
 	private Hashtable<String, Object> buffer = new Hashtable<String, Object>();
+	private double hits = 0;
+	private double misses = 0;
+	private double accesses = 0;
 
 	@SuppressWarnings("unchecked")
 	public Cache(int s, int l, int m, boolean WP, int accessTime)
@@ -158,6 +161,7 @@ public class Cache
 
 	public boolean contains(int address)
 	{
+		accesses++;
 		int index = getIndex(address);
 		int tag = getTag(address);
 
@@ -165,12 +169,24 @@ public class Cache
 		{
 			if (blocks[index][i].isValid() && blocks[index][i].getTag() == tag)
 			{
+				hits++;
 				return true;
 			}
 		}
+		misses++;
 		return false;
 	}
-
+	
+	public double getHitRatio()
+	{
+		return hits/accesses;
+	}
+	
+	public double getMissRatio()
+	{
+		return misses/accesses;
+	}
+	
 	private int getIndex(int address)
 	{
 		return Math.floorMod(address/sizeOfBlock, noSets);
