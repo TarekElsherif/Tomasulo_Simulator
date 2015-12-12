@@ -31,7 +31,8 @@ public class main {
 	static int pipelineWidth;
 	static int instructionBufferSize;
 	static boolean stopIssue;
-
+	static Parser p;
+	static GUI gui;
 	// Processor Variables
 	static int PC = 0;
 	static int tempPC = 0;
@@ -43,110 +44,119 @@ public class main {
 																				// input
 	static ArrayList<Instruction> fuckingUselessArray2 = new ArrayList<Instruction>(); // Instructions
 																						// input
-	static Memory memory = new Memory(S1, L1, M1, writePolicy1, accessTime1,
-			mainMemoryAccessTime, fuckingUselessArray, 300,
-			fuckingUselessArray2, 500);
+	static Memory memory;
 
 	static RegisterFile registerFile = new RegisterFile();
-	static ROB rob = new ROB(ROBsize);
+	static ROB rob;
 	static ReservationStations RS = new ReservationStations();
 
 	public static void main(String[] args) {
 		
-		//GUI Vaiable Intializing
-		if(GUI.L1Selected && !GUI.L2Selected && !GUI.L3Selected)
+		//gui Vaiable Intializing
+		gui= new GUI();
+		gui.frame.setVisible(true);
+		p = new Parser(gui.ProgramText.getText(),gui.DataText.getText()); // Parser reads input from instructions.txt and
+		// data.txt
+		ArrayList<Instruction> insX = p.getInstructions(); // Instructions input
+		ArrayList<Integer> data = p.getBytes(); // Data input
+		int ins_a = p.getInsAddress(); // Memory address of instructions
+		int data_a = p.getDataAddress(); // Memory address of data
+		if(gui.L1Selected && !gui.L2Selected && !gui.L3Selected)
 		{
 			cacheLevels=1;
-			S1=Integer.parseInt(GUI.L1S.getText());
-			L1 = Integer.parseInt(GUI.L1L.getText());
-			M1=Integer.parseInt(GUI.L1m.getText());
-			accessTime1=Integer.parseInt(GUI.L1AccessTime.getText());
-			if(GUI.L1WBSelected)
+			S1=Integer.parseInt(gui.L1S.getText());
+			L1 = Integer.parseInt(gui.L1L.getText());
+			M1=Integer.parseInt(gui.L1m.getText());
+			accessTime1=Integer.parseInt(gui.L1AccessTime.getText());
+			if(gui.L1WBSelected)
 			{
 				writePolicy1=true;
 			}else
 			{
-				if(GUI.L1WTSelected)
+				if(gui.L1WTSelected)
 				{
 					writePolicy1=false;
 				}
 			}
+			memory=new Memory(S1, L1, M1, writePolicy1, accessTime1,
+					mainMemoryAccessTime, data, 300,
+					insX, 500);
 		}else
 		{
-			if(GUI.L1Selected && GUI.L2Selected && !GUI.L3Selected)
+			if(gui.L1Selected && gui.L2Selected && !gui.L3Selected)
 			{
 				cacheLevels=2;
-				S1=Integer.parseInt(GUI.L1S.getText());
-				L1 = Integer.parseInt(GUI.L1L.getText());
-				M1=Integer.parseInt(GUI.L1m.getText());
-				accessTime1=Integer.parseInt(GUI.L1AccessTime.getText());
-				if(GUI.L1WBSelected)
+				S1=Integer.parseInt(gui.L1S.getText());
+				L1 = Integer.parseInt(gui.L1L.getText());
+				M1=Integer.parseInt(gui.L1m.getText());
+				accessTime1=Integer.parseInt(gui.L1AccessTime.getText());
+				if(gui.L1WBSelected)
 				{
 					writePolicy1=true;
 				}else
 				{
-					if(GUI.L1WTSelected)
+					if(gui.L1WTSelected)
 					{
 						writePolicy1=false;
 					}
 				}
-				S2=Integer.parseInt(GUI.L2S.getText());
-				L2 = Integer.parseInt(GUI.L2L.getText());
-				M2=Integer.parseInt(GUI.L2m.getText());
-				accessTime2=Integer.parseInt(GUI.L2AccessTime.getText());
-				if(GUI.L2WBSelected)
+				S2=Integer.parseInt(gui.L2S.getText());
+				L2 = Integer.parseInt(gui.L2L.getText());
+				M2=Integer.parseInt(gui.L2m.getText());
+				accessTime2=Integer.parseInt(gui.L2AccessTime.getText());
+				if(gui.L2WBSelected)
 				{
 					writePolicy2=true;
 				}else
 				{
-					if(GUI.L2WTSelected)
+					if(gui.L2WTSelected)
 					{
 						writePolicy2=false;
 					}
 				}
 			}else
 			{
-				if(GUI.L1Selected && GUI.L2Selected && GUI.L3Selected)
+				if(gui.L1Selected && gui.L2Selected && gui.L3Selected)
 				{
 					cacheLevels=3;
-					S1=Integer.parseInt(GUI.L1S.getText());
-					L1 = Integer.parseInt(GUI.L1L.getText());
-					M1=Integer.parseInt(GUI.L1m.getText());
-					accessTime1=Integer.parseInt(GUI.L1AccessTime.getText());
-					if(GUI.L1WBSelected)
+					S1=Integer.parseInt(gui.L1S.getText());
+					L1 = Integer.parseInt(gui.L1L.getText());
+					M1=Integer.parseInt(gui.L1m.getText());
+					accessTime1=Integer.parseInt(gui.L1AccessTime.getText());
+					if(gui.L1WBSelected)
 					{
 						writePolicy1=true;
 					}else
 					{
-						if(GUI.L1WTSelected)
+						if(gui.L1WTSelected)
 						{
 							writePolicy1=false;
 						}
 					}
-					S2=Integer.parseInt(GUI.L2S.getText());
-					L2 = Integer.parseInt(GUI.L2L.getText());
-					M2=Integer.parseInt(GUI.L2m.getText());
-					accessTime2=Integer.parseInt(GUI.L2AccessTime.getText());
-					if(GUI.L2WBSelected)
+					S2=Integer.parseInt(gui.L2S.getText());
+					L2 = Integer.parseInt(gui.L2L.getText());
+					M2=Integer.parseInt(gui.L2m.getText());
+					accessTime2=Integer.parseInt(gui.L2AccessTime.getText());
+					if(gui.L2WBSelected)
 					{
 						writePolicy2=true;
 					}else
 					{
-						if(GUI.L2WTSelected)
+						if(gui.L2WTSelected)
 						{
 							writePolicy2=false;
 						}
 					}
-					S3=Integer.parseInt(GUI.L3S.getText());
-					L3 = Integer.parseInt(GUI.L3L.getText());
-					M3=Integer.parseInt(GUI.L3m.getText());
-					accessTime3=Integer.parseInt(GUI.L3AccessTime.getText());
-					if(GUI.L3WBSelected)
+					S3=Integer.parseInt(gui.L3S.getText());
+					L3 = Integer.parseInt(gui.L3L.getText());
+					M3=Integer.parseInt(gui.L3m.getText());
+					accessTime3=Integer.parseInt(gui.L3AccessTime.getText());
+					if(gui.L3WBSelected)
 					{
 						writePolicy3=true;
 					}else
 					{
-						if(GUI.L3WTSelected)
+						if(gui.L3WTSelected)
 						{
 							writePolicy3=false;
 						}
@@ -154,15 +164,19 @@ public class main {
 				}
 			}
 		}
-		mainMemoryAccessTime=Integer.parseInt(GUI.MainMemoryAccessTime.getText());
-		ROBsize=Integer.parseInt(GUI.AvailableROB.getText());
-		LOADlatency=Integer.parseInt(GUI.LoadTime.getText());
-		STORElatency=Integer.parseInt(GUI.StoreTime.getText());
-		INTlatency=Integer.parseInt(GUI.IntTime.getText());
-		MULTlatency=Integer.parseInt(GUI.MultTime.getText());
-		pipelineWidth=Integer.parseInt(GUI.PipelineWidth.getText());
-		instructionBufferSize=Integer.parseInt(GUI.InstructionBufferSize.getText());
-		
+	}
+	public static void Run()
+	{
+		//System.out.println(gui.L1L.getText());
+		mainMemoryAccessTime=Integer.parseInt(gui.MainMemoryAccessTime.getText());
+		ROBsize=Integer.parseInt(gui.AvailableROB.getText());
+		LOADlatency=Integer.parseInt(gui.LoadTime.getText());
+		STORElatency=Integer.parseInt(gui.StoreTime.getText());
+		INTlatency=Integer.parseInt(gui.IntTime.getText());
+		MULTlatency=Integer.parseInt(gui.MultTime.getText());
+		pipelineWidth=Integer.parseInt(gui.PipelineWidth.getText());
+		instructionBufferSize=Integer.parseInt(gui.InstructionBufferSize.getText());
+		ArrayList<Instruction> insX = p.getInstructions();
 		
 		PC = 0;
 		cycle = 1;
@@ -171,14 +185,7 @@ public class main {
 		registerFile.getRegister(3).setdata(3);
 		registerFile.getRegister(4).setdata(60);
 		registerFile.getRegister(5).setdata(5);
-
-		Parser p = new Parser(GUI.ProgramText.getText(),GUI.DataText.getText()); // Parser reads input from instructions.txt and
-									// data.txt
-		ArrayList<Instruction> insX = p.getInstructions(); // Instructions input
-		ArrayList<Byte> data = p.getBytes(); // Data input
-		int ins_a = p.getInsAddress(); // Memory address of instructions
-		int data_a = p.getDataAddress(); // Memory address of data
-
+		rob= new ROB(ROBsize);
 		Instruction v = new Instruction("SW", 1, 2, 0);
 		Instruction j = new Instruction("ADDI", 3, 1, 1);
 		Instruction k = new Instruction("MUL", 5, 2, 4);
@@ -195,8 +202,6 @@ public class main {
 		for (int i = 0; i < insX.size(); i++) {
 			System.out.println(insX.get(i));
 		}
-
-		pipelineWidth = 3;
 		cycle = 1;
 		int issued = pipelineWidth;
 		while (insX.get(insX.size() - 1).getCommitted() == 0) {
@@ -268,6 +273,5 @@ public class main {
 			// System.out.println("the RS index: " + ins[l].getROBIndex());
 			cycle++;
 		}
-
 	}
 }

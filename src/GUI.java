@@ -12,45 +12,47 @@ import javax.swing.event.ChangeEvent;
 import java.awt.TextArea;
 import javax.swing.JButton;
 import java.awt.TextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUI {
 
-	public static JFrame frame;
-	public static JTextField L1S;
-	public static JTextField L1L;
-	public static JTextField L1m;
-	public static JTextField L2S;
-	public static JTextField L2L;
-	public static JTextField L2m;
-	public static JTextField L3S;
-	public static JTextField L3L;
-	public static JTextField L3m;
-	public static JTextField PipelineWidth;
-	public static JTextField InstructionBufferSize;
-	public static JTextField LoadSzie;
-	public static JTextField StoreSize;
-	public static JTextField IntSize;
-	public static JTextField MultSize;
-	public static JTextField LoadTime;
-	public static JTextField StoreTime;
-	public static JTextField IntTime;
-	public static JTextField MultTime;
-	public static JTextField AvailableROB;
-	public static JTextField L1AccessTime;
-	public static JTextField L2AccessTime;
-	public static JTextField L3AccessTime;
-	public static JTextPane ProgramText;
-	public static JTextPane DataText;
-	public static boolean L1Selected=false;
-	public static boolean L2Selected=false;
-	public static boolean L3Selected=false;
-	public static boolean L1WBSelected=false;
-	public static boolean L1WTSelected=false;
-	public static boolean L2WBSelected=false;
-	public static boolean L2WTSelected=false;
-	public static boolean L3WBSelected=false;
-	public static boolean L3WTSelected=false;
-	public static JTextField MainMemoryAccessTime;
+	public  JFrame frame;
+	public  JTextField L1S;
+	public  JTextField L1L;
+	public  JTextField L1m;
+	public  JTextField L2S;
+	public  JTextField L2L;
+	public  JTextField L2m;
+	public  JTextField L3S;
+	public  JTextField L3L;
+	public  JTextField L3m;
+	public  JTextField PipelineWidth;
+	public  JTextField InstructionBufferSize;
+	public  JTextField LoadSzie;
+	public  JTextField StoreSize;
+	public  JTextField IntSize;
+	public  JTextField MultSize;
+	public  JTextField LoadTime;
+	public  JTextField StoreTime;
+	public  JTextField IntTime;
+	public  JTextField MultTime;
+	public  JTextField AvailableROB;
+	public  JTextField L1AccessTime;
+	public  JTextField L2AccessTime;
+	public  JTextField L3AccessTime;
+	public  JTextPane ProgramText;
+	public  JTextPane DataText;
+	public  boolean L1Selected=false;
+	public  boolean L2Selected=false;
+	public  boolean L3Selected=false;
+	public  boolean L1WBSelected=false;
+	public  boolean L1WTSelected=false;
+	public  boolean L2WBSelected=false;
+	public  boolean L2WTSelected=false;
+	public  boolean L3WBSelected=false;
+	public  boolean L3WTSelected=false;
+	public  JTextField MainMemoryAccessTime;
 
 	/**
 	 * Launch the application.
@@ -78,7 +80,7 @@ public class GUI {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public static void initialize() {
+	public  void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		frame.setBounds(100, 100, 1050, 800);
@@ -427,7 +429,6 @@ public class GUI {
 		ProcessorInputsPanle.add(MainMemoryAccessLable);
 		
 		MainMemoryAccessTime = new JTextField();
-		MainMemoryAccessTime.setEditable(false);
 		MainMemoryAccessTime.setColumns(10);
 		MainMemoryAccessTime.setBounds(253, 239, 123, 20);
 		ProcessorInputsPanle.add(MainMemoryAccessTime);
@@ -579,6 +580,11 @@ public class GUI {
 		frame.getContentPane().add(OutputsLable);
 		
 		JButton Run = new JButton("Start Simulation");
+		Run.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main.Run();
+			}
+		});
 		Run.setBounds(863, 538, 138, 110);
 		frame.getContentPane().add(Run);
 		
