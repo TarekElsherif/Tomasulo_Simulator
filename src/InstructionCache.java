@@ -21,6 +21,10 @@ public class InstructionCache
 	@SuppressWarnings("unchecked")
 	public InstructionCache(int s, int l, int m, boolean WP, int accessTime)
 	{
+		if (l == 0) {
+			System.out.println("Size Of Block (L) Can't Be Zero - Cache Class");
+			return;
+		}
 		sizeOfCache = s;
 		sizeOfInstructionBlock = l;
 		mWay = m;
