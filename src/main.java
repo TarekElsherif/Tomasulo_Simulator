@@ -51,6 +51,112 @@ public class main {
 	static ReservationStations RS = new ReservationStations();
 
 	public static void main(String[] args) {
+		
+		//GUI Vaiable Intializing
+		if(GUI.L1Selected && !GUI.L2Selected && !GUI.L3Selected)
+		{
+			cacheLevels=1;
+			S1=Integer.parseInt(GUI.L1S.getText());
+			L1 = Integer.parseInt(GUI.L1L.getText());
+			M1=Integer.parseInt(GUI.L1m.getText());
+			accessTime1=Integer.parseInt(GUI.L1AccessTime.getText());
+			if(GUI.L1WBSelected)
+			{
+				writePolicy1=true;
+			}else
+			{
+				if(GUI.L1WTSelected)
+				{
+					writePolicy1=false;
+				}
+			}
+		}else
+		{
+			if(GUI.L1Selected && GUI.L2Selected && !GUI.L3Selected)
+			{
+				cacheLevels=2;
+				S1=Integer.parseInt(GUI.L1S.getText());
+				L1 = Integer.parseInt(GUI.L1L.getText());
+				M1=Integer.parseInt(GUI.L1m.getText());
+				accessTime1=Integer.parseInt(GUI.L1AccessTime.getText());
+				if(GUI.L1WBSelected)
+				{
+					writePolicy1=true;
+				}else
+				{
+					if(GUI.L1WTSelected)
+					{
+						writePolicy1=false;
+					}
+				}
+				S2=Integer.parseInt(GUI.L2S.getText());
+				L2 = Integer.parseInt(GUI.L2L.getText());
+				M2=Integer.parseInt(GUI.L2m.getText());
+				accessTime2=Integer.parseInt(GUI.L2AccessTime.getText());
+				if(GUI.L2WBSelected)
+				{
+					writePolicy2=true;
+				}else
+				{
+					if(GUI.L2WTSelected)
+					{
+						writePolicy2=false;
+					}
+				}
+			}else
+			{
+				if(GUI.L1Selected && GUI.L2Selected && GUI.L3Selected)
+				{
+					cacheLevels=3;
+					S1=Integer.parseInt(GUI.L1S.getText());
+					L1 = Integer.parseInt(GUI.L1L.getText());
+					M1=Integer.parseInt(GUI.L1m.getText());
+					accessTime1=Integer.parseInt(GUI.L1AccessTime.getText());
+					if(GUI.L1WBSelected)
+					{
+						writePolicy1=true;
+					}else
+					{
+						if(GUI.L1WTSelected)
+						{
+							writePolicy1=false;
+						}
+					}
+					S2=Integer.parseInt(GUI.L2S.getText());
+					L2 = Integer.parseInt(GUI.L2L.getText());
+					M2=Integer.parseInt(GUI.L2m.getText());
+					accessTime2=Integer.parseInt(GUI.L2AccessTime.getText());
+					if(GUI.L2WBSelected)
+					{
+						writePolicy2=true;
+					}else
+					{
+						if(GUI.L2WTSelected)
+						{
+							writePolicy2=false;
+						}
+					}
+					S3=Integer.parseInt(GUI.L3S.getText());
+					L3 = Integer.parseInt(GUI.L3L.getText());
+					M3=Integer.parseInt(GUI.L3m.getText());
+					accessTime3=Integer.parseInt(GUI.L3AccessTime.getText());
+					if(GUI.L3WBSelected)
+					{
+						writePolicy3=true;
+					}else
+					{
+						if(GUI.L3WTSelected)
+						{
+							writePolicy3=false;
+						}
+					}
+				}
+			}
+		}
+		mainMemoryAccessTime=Integer.parseInt(GUI.MainMemoryAccessTime.getText());
+		ROBsize=Integer.parseInt(GUI.AvailableROB.getText());
+		
+		
 		PC = 0;
 		cycle = 1;
 		LOADlatency = 1;
