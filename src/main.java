@@ -9,7 +9,7 @@ public class main
 	static int L1 = 16;
 	static int M1 = 2;
 	static boolean writePolicy1 = true;
-	static int accessTime1 = 7;
+	static int accessTime1 = 0;
 	static int S2;
 	static int L2;
 	static int M2;
@@ -21,7 +21,7 @@ public class main
 	static boolean writePolicy3;
 	static int accessTime3;
 	
-	static int mainMemoryAccessTime = 10;
+	static int mainMemoryAccessTime = 0;
 
 	static int ROBsize = 5;
 	static int addLatency;
@@ -71,7 +71,7 @@ public class main
 		Instruction v = new Instruction("SW", 1, 2, 0);
 		Instruction j = new Instruction("ADDI", 3, 1, 1);
 		Instruction k = new Instruction("MUL", 5, 2, 4);
-		Instruction m = new Instruction("ADD", 2, 2, 4);
+		Instruction m = new Instruction("LW", 3, 1, 0);
 		Instruction[] ins = { v, j, k, m };
 
 		for (int i = 0; i < insX.size(); i++) {
@@ -156,9 +156,6 @@ public class main
 			System.out.println("*******");
 			System.out.println(" ");
 			System.out.println(" ");
-			System.out.println(" ");
-			System.out.println("MEMORY");
-			System.out.println(memory);
 			// System.out.println("the answer: " + ins[l].getAnswer());
 			// System.out.println("the ROB index: " + ins[l].getRSIndex());
 			// System.out.println("the RS index: " + ins[l].getROBIndex());
