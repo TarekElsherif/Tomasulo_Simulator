@@ -3,12 +3,12 @@ import java.util.ArrayList;
 public class main {
 	// User Parameters
 
-	static int cacheLevels = 1;
-	static int S1 = 1024;
-	static int L1 = 16;
-	static int M1 = 2;
-	static boolean writePolicy1 = true;
-	static int accessTime1 = 1;
+	static int cacheLevels;
+	static int S1;
+	static int L1;
+	static int M1;
+	static boolean writePolicy1;
+	static int accessTime1;
 	static int S2;
 	static int L2;
 	static int M2;
@@ -20,15 +20,16 @@ public class main {
 	static boolean writePolicy3;
 	static int accessTime3;
 
-	static int mainMemoryAccessTime = 1;
+	static int mainMemoryAccessTime ;
 
-	static int ROBsize = 5;
+	static int ROBsize;
 	
 	static int LOADlatency;
 	static int STORElatency;
 	static int INTlatency;
 	static int MULTlatency;
 	static int pipelineWidth;
+	static int instructionBufferSize;
 	static boolean stopIssue;
 
 	// Processor Variables
@@ -155,6 +156,12 @@ public class main {
 		}
 		mainMemoryAccessTime=Integer.parseInt(GUI.MainMemoryAccessTime.getText());
 		ROBsize=Integer.parseInt(GUI.AvailableROB.getText());
+		LOADlatency=Integer.parseInt(GUI.LoadTime.getText());
+		STORElatency=Integer.parseInt(GUI.StoreTime.getText());
+		INTlatency=Integer.parseInt(GUI.IntTime.getText());
+		MULTlatency=Integer.parseInt(GUI.MultTime.getText());
+		pipelineWidth=Integer.parseInt(GUI.PipelineWidth.getText());
+		instructionBufferSize=Integer.parseInt(GUI.InstructionBufferSize.getText());
 		
 		
 		PC = 0;
