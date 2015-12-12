@@ -8,8 +8,8 @@ public class main {
 
 	static int cacheLevels = 1;
 	static int S1;
-	static int L1;
-	static int M1;
+	static int L1 = 2;
+	static int M1 = 2;
 	static boolean writePolicy1;
 	static int accessTime1;
 	static int S2;
