@@ -8,13 +8,13 @@ public class Memory
 	private int latestcacheAccessTime = 0;
 	
 //	{{Constructors
-	public Memory(int s, int l, int m, boolean WP, int cachecacheAccessTime
+	public Memory(int s, int l, int m, boolean WP, int cacheAccessTime
 			, int memoryAccess, ArrayList<Integer> mainData, int dataStartAddress
 			, ArrayList<Instruction> instruction, int instructionStartAddress)
 	{
-		memory = new Cache[] {new Cache (s, l, m, WP, cachecacheAccessTime)};
+		memory = new Cache[] {new Cache (s, l, m, WP, cacheAccessTime)};
 		instructionMemory = new InstructionCache[] 
-				{new InstructionCache(s/2, l/2, m, WP, cachecacheAccessTime)};
+				{new InstructionCache(s/2, l/2, m, WP, cacheAccessTime)};
 		mainMemory = new MainMemory(memoryAccess, mainData, dataStartAddress, 
 				instruction, instructionStartAddress);
 	}
@@ -106,6 +106,7 @@ public class Memory
 	
 	public void writeData(int address, int inputData)
 	{
+		boolean found = false;
 		int i = 0;
 		for (i = 0; i < memory.length; i++)
 		{
@@ -114,16 +115,18 @@ public class Memory
 			if (memory[i].contains(address))
 			{
 				memory[i].writeByte(address, new Byte(inputData));
+				found = true;
 				if (memory[i].getWritePolicy())
 					break;
-				else if (i < memory.length)
+				else if (i != 0)
 					latestcacheAccessTime += memory[i].getAccessDataCycles();
 			}
 		}
 		
 		if (i == memory.length)
 		{
-			latestcacheAccessTime += mainMemory.getAccessTime();
+			if(found)
+				latestcacheAccessTime += mainMemory.getAccessTime();
 			mainMemory.writeByte(address, new Byte(inputData));
 		}
 		readData(address);
@@ -188,24 +191,27 @@ public class Memory
 	
 	public void writeInstruction(int address, Instruction instruction)
 	{
+		boolean found = false;
 		address /= 2;
 		int i = 0;
 		for (i = 0; i < instructionMemory.length; i++)
 		{
-//			latestcacheAccessTime += instructionMemory[i].getAccessDataCycles();
 			if (instructionMemory[i].contains(address))
 			{
 				instructionMemory[i].writeInstruction(address, instruction);
+				found = true;
 				if (instructionMemory[i].getWritePolicy())
 					break;
+				else if (i != 0)
+					latestcacheAccessTime += instructionMemory[i].getAccessDataCycles();
 			}
 		}
 		if (i == instructionMemory.length)
 		{
-//			latestcacheAccessTime += mainMemory.getAccessTime();
+			if (found)
+				latestcacheAccessTime += mainMemory.getAccessTime();
 			mainMemory.writeInstruction(address, instruction);
 		}
-		
 		readData(address);
 	}
 	

@@ -68,7 +68,7 @@ public class main
 		int ins_a = p.getInsAddress(); // Memory address of instructions
 		int data_a = p.getDataAddress(); // Memory address of data
 
-		Instruction v = new Instruction("LW", 1, 2, 0);
+		Instruction v = new Instruction("SW", 1, 2, 0);
 		Instruction j = new Instruction("ADDI", 3, 1, 1);
 		Instruction k = new Instruction("MUL", 5, 2, 4);
 		Instruction m = new Instruction("ADD", 2, 2, 4);
@@ -157,6 +157,8 @@ public class main
 			System.out.println(" ");
 			System.out.println(" ");
 			System.out.println(" ");
+			System.out.println("MEMORY");
+			System.out.println(memory);
 			// System.out.println("the answer: " + ins[l].getAnswer());
 			// System.out.println("the ROB index: " + ins[l].getRSIndex());
 			// System.out.println("the RS index: " + ins[l].getROBIndex());

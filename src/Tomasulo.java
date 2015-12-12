@@ -92,9 +92,9 @@ public class Tomasulo {
 		if (useROB) {
 			firstOperand = main.rob.getRob(ins.getROBIndex()).getValue();
 		}
-		if (ins.getOp() == "ADD" || ins.getOp() == "BEQ"
-				|| ins.getOp() == "SUB" || ins.getOp() == "NAND"
-				|| ins.getOp() == "MUL") {
+		if (ins.getOp().equals("ADD") || ins.getOp().equals("BEQ")
+				|| ins.getOp().equals("SUB") || ins.getOp().equals("NAND")
+				|| ins.getOp().equals("MUL")) {
 
 			useReg2 = main.RS.getRS(ins.getRSIndex()).getQk() == -1;
 			useROB2 = (main.RS.getRS(ins.getRSIndex()).getQk() != -1 && main.rob
@@ -116,20 +116,12 @@ public class Tomasulo {
 		if (ins.getCyclesLeft() == -1) {
 			if (ins.getOp() == "LW") {
 				ins.setAnswer(main.memory.readData(firstOperand + secondOperand));
-//				System.out.println(firstOperand);
-//				System.out.println(secondOperand);
-//				System.out.println("Address:  " + (firstOperand + secondOperand));
-//				System.out.println("Answer  " + main.memory.readData(firstOperand + secondOperand));
-				System.out.println("1st " + firstOperand);
-				System.out.println("2nd " + secondOperand);
 			}
 			if (ins.getOp() == "SW") {
-				main.memory.writeData(firstOperand + secondOperand,
+				main.memory.writeData(ins.getDestReg(),
 						main.registerFile.getRegister(ins.getDestReg()).getdata());
 			}			
-			int tmp = main.memory.getLatestAccessTime();
-			ins.setCyclesLeft(tmp);
-			System.out.println("TMP: " + tmp);
+			ins.setCyclesLeft(main.memory.getLatestAccessTime());
 			ins.cyclesLeft++;
 
 		}
@@ -137,7 +129,6 @@ public class Tomasulo {
 			switch (ins.getOp()) {
 			case "LW":
 				ins.setExecuted(main.cycle);
-				// TODO : call the read and write methods from memory
 				break;
 
 			case "SW":

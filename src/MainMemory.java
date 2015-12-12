@@ -29,9 +29,6 @@ public class MainMemory
 			dataMemory[dataStartAddress + i] = new Byte(mainData.get(i));
 		for (int i = 0; i < instructions.size(); i++)
 			instructionMemory[instructionStartAddress + i] = instructions.get(i);
-		
-
-		dataMemory[40].setData(75);
 	}
 		
 	public Byte readByte(int address)
