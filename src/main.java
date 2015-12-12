@@ -23,12 +23,11 @@ public class main {
 	static int mainMemoryAccessTime = 1;
 
 	static int ROBsize = 5;
-	static int addLatency;
-	static int subLatency;
-	static int addiLatency;
-	static int beqLatency;
-	static int nandLatency;
-	static int mulLatency;
+	
+	static int LOADlatency;
+	static int STORElatency;
+	static int INTlatency;
+	static int MULTlatency;
 	static int pipelineWidth;
 	static boolean stopIssue;
 
@@ -54,10 +53,10 @@ public class main {
 	public static void main(String[] args) {
 		PC = 0;
 		cycle = 1;
-		addLatency = 1;
-		subLatency = 2;
-		mulLatency = 1;
-		beqLatency = 1;
+		LOADlatency = 1;
+		STORElatency = 2;
+		INTlatency = 1;
+		MULTlatency = 1;
 		registerFile.getRegister(1).setdata(1);
 		registerFile.getRegister(2).setdata(40);
 		registerFile.getRegister(3).setdata(3);

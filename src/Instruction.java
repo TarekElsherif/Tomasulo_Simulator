@@ -41,50 +41,50 @@ public class Instruction {
 			break;
 
 		case "JMP":
-			cyclesLeft = 0;
+			cyclesLeft = main.INTlatency;
 			immediate = unknown;
 			FU = "INT";
 			break;
 
 		case "BEQ":
-			cyclesLeft = main.subLatency;
+			cyclesLeft = main.INTlatency;
 			immediate = unknown;
 			FU = "INT";
 			break;
 
 		case "JALR":
-			cyclesLeft = 0;
+			cyclesLeft = main.INTlatency;
 			FU = "INT";
 			break;
 
 		case "RET":
-			cyclesLeft = 0;
+			cyclesLeft = main.INTlatency;
 			FU = "INT";
 			break;
 
 		case "ADD":
-			cyclesLeft = main.addLatency;
+			cyclesLeft = main.INTlatency;
 			srcReg2 = unknown;
 			FU = "INT";
 			break;
 		case "SUB":
-			cyclesLeft = main.subLatency;
+			cyclesLeft = main.INTlatency;
 			srcReg2 = unknown;
 			FU = "INT";
 			break;
 		case "NAND":
-			cyclesLeft = main.nandLatency;
+			cyclesLeft = main.INTlatency;
 			srcReg2 = unknown;
 			FU = "INT";
 			break;
 		case "MUL":
-			cyclesLeft = main.mulLatency;
+			cyclesLeft = main.MULTlatency;
 			srcReg2 = unknown;
 			FU = "MULT";
 			break;
 
 		case "ADDI":
-			cyclesLeft = main.addiLatency;
+			cyclesLeft = main.INTlatency;
 			immediate = unknown;
 			FU = "INT";
 			break;
