@@ -3,7 +3,10 @@ public class Tomasulo {
 		boolean checkRS = (main.RS.getRSbyFU(ins.getFU()).isBusy());
 		boolean checkROB = (main.rob.isFull());
 		if (checkRS || checkROB)
+		{
+			main.stopIssue = true;
 			return;
+		}
 
 		// RS modification
 		ReservationStation s = main.RS.getRSbyFU(ins.getFU());
