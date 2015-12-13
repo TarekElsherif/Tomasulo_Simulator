@@ -41,8 +41,8 @@ public class main {
 	static int data_a;
 	static GUI gui;
 	// Processor Variables
-	static int PC = 0;
-	static int tempPC = 0;
+	static int PC;
+	static int tempPC;
 	static int cycle;
 	static boolean writing;
 	static boolean committing;
@@ -58,14 +58,6 @@ public class main {
 		//gui Vaiable Intializing
 		gui= new GUI();
 		gui.frame.setVisible(true);
-	}
-	
-	public static double round(double value, int places) {
-	    if (places < 0) throw new IllegalArgumentException();
-
-	    BigDecimal bd = new BigDecimal(value);
-	    bd = bd.setScale(places, RoundingMode.HALF_UP);
-	    return bd.doubleValue();
 	}
 	
 	public static void Run()
@@ -187,11 +179,11 @@ public class main {
 				}
 			}
 		}
-		registerFile.getRegister(1).setdata(1);
-		registerFile.getRegister(2).setdata(40);
-		registerFile.getRegister(3).setdata(3);
-		registerFile.getRegister(4).setdata(60);
-		registerFile.getRegister(5).setdata(5);
+//		registerFile.getRegister(1).setdata(1);
+//		registerFile.getRegister(2).setdata(40);
+//		registerFile.getRegister(3).setdata(3);
+//		registerFile.getRegister(4).setdata(60);
+//		registerFile.getRegister(5).setdata(5);
 		ROBsize=Integer.parseInt(gui.AvailableROB.getText());
 		LOADlatency=Integer.parseInt(gui.LoadTime.getText());
 		STORElatency=Integer.parseInt(gui.StoreTime.getText());
@@ -202,11 +194,11 @@ public class main {
 		PC = 0;
 		cycle = 1;
 		rob= new ROB(ROBsize);
-		Instruction v = new Instruction("SW", 1, 2, 0);
-		Instruction j = new Instruction("ADDI", 3, 1, 1);
-		Instruction k = new Instruction("MUL", 5, 2, 4);
-		Instruction m = new Instruction("ADD", 1, 2, 2);
-		Instruction[] ins = { v, j, k, m };
+//		Instruction v = new Instruction("SW", 1, 2, 0);
+//		Instruction j = new Instruction("ADDI", 3, 1, 1);
+//		Instruction k = new Instruction("MUL", 5, 2, 4);
+//		Instruction m = new Instruction("ADD", 1, 2, 2);
+//		Instruction[] ins = { v, j, k, m };
 		gui.CR.append("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+ "\n");
 		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 //		for (int i = 0; i < ins.length; i++) {
@@ -220,7 +212,7 @@ public class main {
 			gui.CR.append(""+insX.get(i)+"\n");
 			System.out.println(insX.get(i));
 		}
-		cycle = 1;
+//		cycle = 1;
 		int issued = pipelineWidth;
 		while (insX.get(insX.size() - 1).getCommitted() == 0) {
 			branchMisprediction=false;
@@ -333,7 +325,7 @@ public class main {
 		double totalPrediction=misPrediction+rightPrediction;
 		gui.IPC.setText(""+IPC);
 		gui.BranchMisprediction.setText(""+misPrediction/totalPrediction);
-		System.out.println("------------------------------Level 1 HitRatio: " + memory.getDataHitRatio(1));
+//		System.out.println("------------------------------Level 1 HitRatio: " + memory.getDataHitRatio(1));
 //		System.out.println("------------------------------Level 2 HitRatio: " + memory.getDataHitRatio(2));
 //		System.out.println("------------------------------Level 3 HitRatio: " + memory.getDataHitRatio(3));
 		if(gui.L1Selected && !gui.L2Selected && !gui.L3Selected)
