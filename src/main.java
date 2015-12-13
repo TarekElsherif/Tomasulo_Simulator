@@ -7,7 +7,7 @@ public class main {
 	// User Parameters
 
 	static int cacheLevels = 1;
-	static int S1;
+	static int S1 = 1024;
 	static int L1 = 2;
 	static int M1 = 2;
 	static boolean writePolicy1;
@@ -24,7 +24,7 @@ public class main {
 	static int accessTime3;
 
 	static int mainMemoryAccessTime;
-	
+
 	static int ROBsize = 5;
 	static int LOADlatency;
 	static int STORElatency;
@@ -40,26 +40,24 @@ public class main {
 	static boolean branchMisprediction;
 	static boolean stopIssue;
 	static int pipelineWidth;
-	
+
 	static Parser p = new Parser(); // Parser reads input from instructions.txt
 	// and
 	// data.txt
-	
+
 	static ArrayList<Instruction> insX = p.getInstructions(); // Instructions
 	// input
 	static ArrayList<Integer> data = p.getBytes(); // Data input
-		
+
 	static int ins_a = p.getInsAddress(); // Memory address of instructions
 	static int data_a = p.getDataAddress(); // Memory address of data
-	
-	static Memory memory = new Memory(S1, L1, M1, writePolicy1, accessTime1, mainMemoryAccessTime, data, data_a, insX, ins_a);
+
+	static Memory memory = new Memory(S1, L1, M1, writePolicy1, accessTime1,
+			mainMemoryAccessTime, data, data_a, insX, ins_a);
 
 	static RegisterFile registerFile = new RegisterFile();
 	static ROB rob = new ROB(ROBsize);
 	static ReservationStations RS = new ReservationStations();
-
-
-
 
 	public static void main(String[] args) {
 		PC = 0;
@@ -74,31 +72,32 @@ public class main {
 		registerFile.getRegister(4).setdata(60);
 		registerFile.getRegister(5).setdata(5);
 
-		Instruction v = new Instruction("JALR", 1, 1, 0);
+		Instruction v = new Instruction("ADD", 1, 1, 0);
 		Instruction j = new Instruction("ADDI", 3, 1, 2);
 		Instruction k = new Instruction("MUL", 4, 2, 4);
 		Instruction m = new Instruction("RET", 1, 0, 0);
 		Instruction[] ins = { v, j, k, m };
 
-		for (int i = 0; i < insX.size(); i++) {
-			insX.set(i, ins[i]);
-		}
+		// for (int i = 0; i < insX.size(); i++) {
+		// insX.set(i, ins[i]);
+		// }
+		//
+		// // System.out.println(insX.size()
+		// // + " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+		// for (int i = 0; i < ins.length; i++) {
+		// System.out.println(ins[i]);
+		// }
+		// System.out.println("");
+		//
+		// for (int i = 0; i < insX.size(); i++) {
+		// System.out.println(insX.get(i));
+		// }
 
-		// System.out.println(insX.size()
-		// + " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		for (int i = 0; i < ins.length; i++) {
-			System.out.println(ins[i]);
-		}
-		System.out.println("");
-
-		for (int i = 0; i < insX.size(); i++) {
-			System.out.println(insX.get(i));
-		}
-
+		pipelineWidth = 2;
 		int issued = pipelineWidth;
-		while (cycle <= 10) {
-			System.out.println("PC: " + PC);
-			// while (insX.get(insX.size() - 1).getCommitted() == 0) {
+		// while (cycle <= 30) {
+		System.out.println("PC: " + PC);
+		while (insX.get(insX.size() - 1).getCommitted() == 0) {
 			branchMisprediction = false;
 			stopIssue = false;
 			writing = false;
@@ -177,4 +176,3 @@ public class main {
 	}
 	// }
 }
-

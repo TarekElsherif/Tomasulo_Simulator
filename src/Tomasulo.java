@@ -339,6 +339,7 @@ public class Tomasulo {
 						}
 						// +ve not taken
 						else {
+							System.out.println("blabla");
 							clearStatusOfRegisters();
 							main.rob.flush();
 							main.RS.flush();
@@ -440,6 +441,7 @@ public class Tomasulo {
 						// equal
 						// to
 						// the rob index removed
+						System.out.println("HERE");
 						for (int i = 0; i < main.RS.getLength(); i++) {
 							if (main.RS.getRS(i).getQj() == ins.getROBIndex()) {
 								main.RS.getRS(i).setQj(-1);

@@ -83,15 +83,25 @@ public class Parser {
 			case "LW":
 				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
 				String[] spl = regs[2].split("R");
-				par2 = Integer.parseInt(spl[1].replaceAll("[^\\d.]", ""));
-				par3 = Integer.parseInt(spl[0].replaceAll("[^\\d.]", ""));
+				try {
+					par2 = Integer.parseInt(spl[1].replaceAll("[^\\d.]", ""));	
+					par3 = Integer.parseInt(spl[0].replaceAll("[^\\d.]", ""));
+				} catch (NumberFormatException e) {
+					System.out
+							.println("Please specify the index in LW - Parser");
+				}
 				break;
 
 			case "SW":
 				par1 = Integer.parseInt(regs[1].replaceAll("[^\\d.]", ""));
 				String[] spl1 = regs[2].split("R");
-				par2 = Integer.parseInt(spl1[1].replaceAll("[^\\d.]", ""));
-				par3 = Integer.parseInt(spl1[0].replaceAll("[^\\d.]", ""));
+				try {
+					par2 = Integer.parseInt(spl1[1].replaceAll("[^\\d.]", ""));
+					par3 = Integer.parseInt(spl1[0].replaceAll("[^\\d.]", ""));
+				} catch (NumberFormatException e) {
+					System.out
+							.println("Please specify the index in SW - Parser");
+				}
 				break;
 
 			case "JMP":
@@ -142,10 +152,10 @@ public class Parser {
 					.println("Parsing Error; Make sure to add spaces between Register names in instruction.txt.");
 			return null;
 		}
-		if (par1 == 0) {
-			System.out.println("You can not write in Register R0. - Parser");
-			return null;
-		}
+		// if (par1 == 0) {
+		// System.out.println("You can not write in Register R0. - Parser");
+		// return null;
+		// }
 		return new Instruction(ins, par1, par2, par3);
 
 	}
@@ -153,7 +163,8 @@ public class Parser {
 	public ArrayList<Integer> bufferToByte(String[] s) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		for (int i = 0; i < s.length; i++) {
-			Integer b = new Integer(Integer.parseInt(s[i].replaceAll("[^\\d.]", "")));
+			Integer b = new Integer(Integer.parseInt(s[i].replaceAll("[^\\d.]",
+					"")));
 			result.add(b);
 		}
 		return result;
