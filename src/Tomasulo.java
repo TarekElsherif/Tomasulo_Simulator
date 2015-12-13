@@ -306,6 +306,7 @@ public class Tomasulo {
 					if (ins.getAnswer() == 0) {
 						// -ve taken
 						if (ins.getImmediate() < 0) {
+							main.misPrediction++;
 							main.branchMisprediction = true;
 							// clear issued committed executed and written
 							clearInstructions(ins);
@@ -318,6 +319,7 @@ public class Tomasulo {
 						}
 						// +ve taken
 						else {
+							main.rightPrediction++;
 							main.rob.incHead();
 							main.rob.getRob(ins.getROBIndex()).setType("");
 							main.rob.getRob(ins.getROBIndex()).setDest(-1);
@@ -329,6 +331,7 @@ public class Tomasulo {
 					} else {
 						// -ve not taken
 						if (ins.getImmediate() < 0) {
+							main.rightPrediction++;
 							main.rob.incHead();
 							main.rob.getRob(ins.getROBIndex()).setType("");
 							main.rob.getRob(ins.getROBIndex()).setDest(-1);
@@ -339,6 +342,7 @@ public class Tomasulo {
 						}
 						// +ve not taken
 						else {
+							main.misPrediction++;
 							clearStatusOfRegisters();
 							main.rob.flush();
 							main.RS.flush();

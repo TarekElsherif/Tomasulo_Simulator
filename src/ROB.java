@@ -94,6 +94,8 @@ public class ROB {
 	}
 	
 	public void flush() {
+		head=0;
+		tail=0;
 		for (int i = 0; i < rob.length; i++) {
 			rob[i].setType("");
 			rob[i].setDest(-1);

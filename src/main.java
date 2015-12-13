@@ -21,9 +21,10 @@ public class main {
 	static int M3;
 	static boolean writePolicy3;
 	static int accessTime3;
-
+	static boolean branchMisprediction;
 	static int mainMemoryAccessTime ;
-
+	static double misPrediction=0;
+	static double rightPrediction=0;
 	static int ROBsize;
 	
 	static int LOADlatency;
@@ -222,27 +223,33 @@ public class main {
 		cycle = 1;
 		int issued = pipelineWidth;
 		while (insX.get(insX.size() - 1).getCommitted() == 0) {
+			branchMisprediction=false;
 			writing = false;
 			committing = false;
 			stopIssue = false;
 			issued = pipelineWidth;
 			for (int l = 0; l < insX.size(); l++) {
-				if (insX.get(l).getIssued() == 0) {
-					if (issued > 0) {
-						if (!stopIssue) {
-							Tomasulo.issue(insX.get(l));
-							issued -= 1;
-						}
-					}
-				} else {
-					if (insX.get(l).getExecuted() == 0) {
-						Tomasulo.execute(insX.get(l));
+				if (!branchMisprediction) {
+					if (l < PC && insX.get(l).getIssued() == 0) {
 					} else {
-						if (insX.get(l).getWritten() == 0) {
-							Tomasulo.writeBack(insX.get(l));
+						if (insX.get(l).getIssued() == 0) {
+							if (issued > 0) {
+								if (!stopIssue) {
+									Tomasulo.issue(insX.get(l));
+									issued--;
+								}
+							}
 						} else {
-							if (insX.get(l).getCommitted() == 0) {
-								Tomasulo.commit(insX.get(l));
+							if (insX.get(l).getExecuted() == 0) {
+								Tomasulo.execute(insX.get(l));
+							} else {
+								if (insX.get(l).getWritten() == 0) {
+									Tomasulo.writeBack(insX.get(l));
+								} else {
+									if (insX.get(l).getCommitted() == 0) {
+										Tomasulo.commit(insX.get(l));
+									}
+								}
 							}
 						}
 					}
@@ -323,7 +330,9 @@ public class main {
 		double noi = (double) insX.size();
 		double cyc = (double) cycle;
 		double IPC = noi/cyc;
+		double totalPrediction=misPrediction+rightPrediction;
 		gui.IPC.setText(""+IPC);
+		gui.BranchMisprediction.setText(""+misPrediction/totalPrediction);
 		System.out.println("------------------------------Level 1 HitRatio: " + memory.getDataHitRatio(1));
 //		System.out.println("------------------------------Level 2 HitRatio: " + memory.getDataHitRatio(2));
 //		System.out.println("------------------------------Level 3 HitRatio: " + memory.getDataHitRatio(3));
