@@ -32,6 +32,7 @@ public class main {
 	static int instructionBufferSize;
 	static boolean stopIssue;
 	static Parser p;
+	
 	static GUI gui;
 	// Processor Variables
 	static int PC = 0;
@@ -55,8 +56,14 @@ public class main {
 		//gui Vaiable Intializing
 		gui= new GUI();
 		gui.frame.setVisible(true);
+	}
+	public static void Run()
+	{
+		//System.out.println(gui.L1L.getText());
+		//System.out.println(gui.ProgramText.getText());
 		p = new Parser(gui.ProgramText.getText(),gui.DataText.getText()); // Parser reads input from instructions.txt and
 		// data.txt
+		
 		ArrayList<Instruction> insX = p.getInstructions(); // Instructions input
 		ArrayList<Integer> data = p.getBytes(); // Data input
 		int ins_a = p.getInsAddress(); // Memory address of instructions
@@ -164,10 +171,6 @@ public class main {
 				}
 			}
 		}
-	}
-	public static void Run()
-	{
-		//System.out.println(gui.L1L.getText());
 		mainMemoryAccessTime=Integer.parseInt(gui.MainMemoryAccessTime.getText());
 		ROBsize=Integer.parseInt(gui.AvailableROB.getText());
 		LOADlatency=Integer.parseInt(gui.LoadTime.getText());
@@ -176,8 +179,6 @@ public class main {
 		MULTlatency=Integer.parseInt(gui.MultTime.getText());
 		pipelineWidth=Integer.parseInt(gui.PipelineWidth.getText());
 		instructionBufferSize=Integer.parseInt(gui.InstructionBufferSize.getText());
-		ArrayList<Instruction> insX = p.getInstructions();
-		
 		PC = 0;
 		cycle = 1;
 		registerFile.getRegister(1).setdata(1);
