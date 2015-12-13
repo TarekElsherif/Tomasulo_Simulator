@@ -86,8 +86,8 @@ public class main {
 				}
 			}
 			memory=new Memory(S1, L1, M1, writePolicy1, accessTime1,
-					mainMemoryAccessTime, data, 300,
-					insX, 500);
+					mainMemoryAccessTime, data, ins_a,
+					insX, data_a);
 		}else
 		{
 			if(gui.L1Selected && gui.L2Selected && !gui.L3Selected)
@@ -171,6 +171,11 @@ public class main {
 				}
 			}
 		}
+		registerFile.getRegister(1).setdata(1);
+		registerFile.getRegister(2).setdata(40);
+		registerFile.getRegister(3).setdata(3);
+		registerFile.getRegister(4).setdata(60);
+		registerFile.getRegister(5).setdata(5);
 		mainMemoryAccessTime=Integer.parseInt(gui.MainMemoryAccessTime.getText());
 		ROBsize=Integer.parseInt(gui.AvailableROB.getText());
 		LOADlatency=Integer.parseInt(gui.LoadTime.getText());
@@ -181,26 +186,23 @@ public class main {
 		instructionBufferSize=Integer.parseInt(gui.InstructionBufferSize.getText());
 		PC = 0;
 		cycle = 1;
-		registerFile.getRegister(1).setdata(1);
-		registerFile.getRegister(2).setdata(40);
-		registerFile.getRegister(3).setdata(3);
-		registerFile.getRegister(4).setdata(60);
-		registerFile.getRegister(5).setdata(5);
 		rob= new ROB(ROBsize);
 		Instruction v = new Instruction("SW", 1, 2, 0);
 		Instruction j = new Instruction("ADDI", 3, 1, 1);
 		Instruction k = new Instruction("MUL", 5, 2, 4);
 		Instruction m = new Instruction("ADD", 1, 2, 2);
 		Instruction[] ins = { v, j, k, m };
-
-		System.out.println(insX.size()
-				+ " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-		for (int i = 0; i < ins.length; i++) {
-			System.out.println(ins[i]);
-		}
+		gui.CR.append("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+ "\n");
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+//		for (int i = 0; i < ins.length; i++) {
+//			gui.CR.append(""+ins[i]+ "\n");
+//			System.out.println(ins[i]);
+//		}
+//		gui.CR.append("" + "\n");
 		System.out.println("");
 
 		for (int i = 0; i < insX.size(); i++) {
+			gui.CR.append(""+insX.get(i)+"\n");
 			System.out.println(insX.get(i));
 		}
 		cycle = 1;
@@ -232,20 +234,35 @@ public class main {
 					}
 				}
 			}
+			//Cycles
+			gui.CR.append("\n-------------------------------\n");
+			gui.CR.append("Cycle no.: " + cycle+"\n\n");
 			System.out.println();
 			System.out.println("-------------------------------");
 			System.out.println();
 			System.out.println("Cycle no.: " + cycle);
-			// System.out.println(l + ": ");
-			// System.out.print("issued: " + ins[l].getIssued() + ", ");
-			// System.out.print("Executed: " + ins[l].getExecuted() + ", ");
-			// System.out.print("Written: " + ins[l].getWritten() + ", ");
-			// System.out.println("commited: " + ins[l].getCommitted());
+			
+			//ROB
+			gui.CR.append("ROB.:\n" + rob.toString() + "\n");
 			System.out.println("ROB:");
 			rob.tostring();
+			
+			//Reservation Stations
+			gui.CR.append("Reservation Stations:\n" + RS.toString() + "\n");
 			System.out.println("Reservation Stations: ");
 			RS.tostring();
+			
+			
 			for (int l = 0; l < insX.size(); l++) {
+				//Result Table
+				gui.CR.append(insX.get(l).getOp()
+						+ ": DestReg: "
+						+ main.registerFile.getRegister(
+								insX.get(l).getDestReg()).getstatus() + "\n" + insX.get(l).getOp() + ": issued: " + insX.get(l).getIssued()
+						+ ", executed: " + insX.get(l).getExecuted()
+						+ ", written: " + insX.get(l).getWritten()
+						+ ", committed: " + insX.get(l).getCommitted() );
+				
 				System.out.println(l
 						+ ": DestReg: "
 						+ main.registerFile.getRegister(
@@ -255,6 +272,12 @@ public class main {
 						+ ", written: " + insX.get(l).getWritten()
 						+ ", committed: " + insX.get(l).getCommitted());
 			}
+			gui.CR.append("*******" + "\n"+ "R1 : "
+					+ main.registerFile.getRegister(1).getdata()+ "\n"+"R2 : "
+					+ main.registerFile.getRegister(2).getdata() + "\n" + "R3 : "
+					+ main.registerFile.getRegister(3).getdata() + "\n" + "R4 : "
+					+ main.registerFile.getRegister(4).getdata() + "\n" + "R5 : "
+					+ main.registerFile.getRegister(5).getdata() + "\n "+ "*******" + "\n" + " "+ "\n" + " " );
 			System.out.println("*******");
 			System.out.println("R1 : "
 					+ main.registerFile.getRegister(1).getdata());
@@ -274,5 +297,22 @@ public class main {
 			// System.out.println("the RS index: " + ins[l].getROBIndex());
 			cycle++;
 		}
+		gui.R1.setText(""+registerFile.getRegister(1).getdata());
+		gui.R2.setText(""+registerFile.getRegister(2).getdata());
+		gui.R3.setText(""+registerFile.getRegister(3).getdata());
+		gui.R4.setText(""+registerFile.getRegister(4).getdata());
+		gui.R5.setText(""+registerFile.getRegister(5).getdata());
+		gui.R6.setText(""+registerFile.getRegister(6).getdata());
+		gui.R7.setText(""+registerFile.getRegister(7).getdata());
+		gui.TotalTime.setText(""+cycle);
+		double noi = (double) insX.size();
+		double cyc = (double) cycle;
+		double IPC = noi/cyc;
+		gui.IPC.setText(""+IPC);
+		// System.out.println(l + ": ");
+					// System.out.print("issued: " + ins[l].getIssued() + ", ");
+					// System.out.print("Executed: " + ins[l].getExecuted() + ", ");
+					// System.out.print("Written: " + ins[l].getWritten() + ", ");
+					// System.out.println("commited: " + ins[l].getCommitted());
 	}
 }

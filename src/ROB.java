@@ -77,6 +77,22 @@ public class ROB {
 			System.out.println(rob[i].isReady());
 		}
 	}
+	
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < rob.length; i++) {
+			if (rob[i].getType() != "") {
+				str = str + rob[i].getType() + ", ";
+				System.out.print(rob[i].getType() + ", ");
+			}
+			str = str + rob[i].getDest() + ", " + rob[i].getValue() + ", " + rob[i].isReady() + "\n";
+			System.out.print(rob[i].getDest() + ", ");
+			System.out.print(rob[i].getValue() + ", ");
+			System.out.println(rob[i].isReady());
+		}
+		return str;
+	}
+	
 	public void flush() {
 		for (int i = 0; i < rob.length; i++) {
 			rob[i].setType("");

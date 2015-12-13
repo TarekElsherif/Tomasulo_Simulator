@@ -58,6 +58,31 @@ public class ReservationStations {
 			System.out.println(RS[i].getA());
 		}
 	}
+	
+	public String toString() {
+		String str = "";
+		for (int i = 0; i < RS.length; i++) {
+			str = str + RS[i].getName() + ", " + RS[i].isBusy() + ", "  + RS[i].getOp() + ", ";
+//			System.out.print(RS[i].getName() + ", ");
+//			System.out.print(RS[i].isBusy() + ", ");
+//			System.out.print(RS[i].getOp() + ", ");
+			if (RS[i].getVj() != null) {
+				str = str + "\n" + RS[i].getVj().getname() + ", ";
+				//System.out.print(RS[i].getVj().getname() + ", ");
+			}
+			if (RS[i].getVk() != null) {
+				str = str + "\n" + RS[i].getVk().getname() + ", ";
+				//System.out.print(RS[i].getVk().getname() + ", ");
+			}
+			str = str + RS[i].getQj() + ", " + RS[i].getQk() + ", " + RS[i].getDest() + ", " + RS[i].getA() + "\n";
+//			System.out.print(RS[i].getQj() + ", ");
+//			System.out.print(RS[i].getQk() + ", ");
+//			System.out.print(RS[i].getDest() + ", ");
+//			System.out.println(RS[i].getA());
+		}
+		return str;
+	}
+	
 	public int getLength(){
 		return RS.length;
 	}

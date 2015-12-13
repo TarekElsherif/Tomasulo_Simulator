@@ -41,8 +41,16 @@ public class GUI {
 	public  JTextField L1AccessTime;
 	public  JTextField L2AccessTime;
 	public  JTextField L3AccessTime;
+	public 	JTextField TotalTime;
+	public 	JTextField IPC;
+	public 	JTextField Cache1HitRatio;
+	public 	JTextField Cache2HitRatio;
+	public 	JTextField Cache3HitRatio;
+	public 	JTextField GlobalAMAT;
+	public 	JTextField BranchMisprediction;
 	public  JTextPane ProgramText;
 	public  JTextPane DataText;
+	public  TextArea CR;
 	public  boolean L1Selected=false;
 	public  boolean L2Selected=false;
 	public  boolean L3Selected=false;
@@ -53,6 +61,14 @@ public class GUI {
 	public  boolean L3WBSelected=false;
 	public  boolean L3WTSelected=false;
 	public  JTextField MainMemoryAccessTime;
+	public JTextField R0;
+	public JTextField R1;
+	public JTextField R2;
+	public JTextField R3;
+	public JTextField R4;
+	public JTextField R5;
+	public JTextField R6;
+	public JTextField R7;
 
 	/**
 	 * Launch the application.
@@ -545,35 +561,20 @@ public class GUI {
 		ProcessorInputsPanle2.add(AvailableROB);
 		AvailableROB.setColumns(10);
 		
-		TextArea Registers = new TextArea();
-		Registers.setBackground(Color.GRAY);
-		Registers.setEditable(false);
-		Registers.setBounds(634, 34, 195, 330);
-		frame.getContentPane().add(Registers);
-		
 		JLabel RegistersLabel = new JLabel("Registers");
-		RegistersLabel.setBounds(634, 14, 82, 14);
+		RegistersLabel.setBounds(437, 14, 82, 14);
 		frame.getContentPane().add(RegistersLabel);
 		
-		TextArea ReorderedBuffer = new TextArea();
-		ReorderedBuffer.setBackground(Color.GRAY);
-		ReorderedBuffer.setEditable(false);
-		ReorderedBuffer.setBounds(433, 34, 195, 330);
-		frame.getContentPane().add(ReorderedBuffer);
+		CR = new TextArea();
+		CR.setRows(1000000);
+		CR.setBackground(new Color(100, 149, 237));
+		CR.setEditable(false);
+		CR.setBounds(634, 34, 390, 330);
+		frame.getContentPane().add(CR);
 		
-		JLabel ReorderedBufferLable = new JLabel("Reordered Buffer");
-		ReorderedBufferLable.setBounds(433, 14, 114, 14);
-		frame.getContentPane().add(ReorderedBufferLable);
-		
-		TextArea ReservationStaions = new TextArea();
-		ReservationStaions.setBackground(Color.GRAY);
-		ReservationStaions.setEditable(false);
-		ReservationStaions.setBounds(835, 34, 195, 330);
-		frame.getContentPane().add(ReservationStaions);
-		
-		JLabel ReservationStaionsLable = new JLabel("Reservation Staions");
-		ReservationStaionsLable.setBounds(835, 11, 195, 14);
-		frame.getContentPane().add(ReservationStaionsLable);
+		JLabel IEWCLable = new JLabel("Cycles Result");
+		IEWCLable.setBounds(629, 14, 395, 14);
+		frame.getContentPane().add(IEWCLable);
 		
 		JLabel OutputsLable = new JLabel("Outputs");
 		OutputsLable.setBounds(437, 403, 114, 14);
@@ -598,67 +599,154 @@ public class GUI {
 		TotalTimeLable.setBounds(10, 27, 170, 14);
 		OutputPanel.add(TotalTimeLable);
 		
-		TextField TotalTime = new TextField();
+		TotalTime = new JTextField();
 		TotalTime.setEditable(false);
-		TotalTime.setBounds(186, 19, 121, 22);
+		TotalTime.setBounds(186, 19, 217, 22);
 		OutputPanel.add(TotalTime);
 		
 		JLabel IPCLable = new JLabel("IPC :");
 		IPCLable.setBounds(10, 71, 170, 14);
 		OutputPanel.add(IPCLable);
 		
-		TextField IPC = new TextField();
+		IPC = new JTextField();
 		IPC.setEditable(false);
-		IPC.setBounds(186, 71, 121, 22);
+		IPC.setBounds(186, 71, 217, 22);
 		OutputPanel.add(IPC);
 		
 		JLabel HitRatioLable = new JLabel("Hit Ratio :");
 		HitRatioLable.setBounds(10, 130, 63, 14);
 		OutputPanel.add(HitRatioLable);
 		
-		TextField Cach1HitRatio = new TextField();
-		Cach1HitRatio.setEditable(false);
-		Cach1HitRatio.setBounds(79, 122, 72, 22);
-		OutputPanel.add(Cach1HitRatio);
+		Cache1HitRatio = new JTextField();
+		Cache1HitRatio.setEditable(false);
+		Cache1HitRatio.setBounds(92, 126, 97, 22);
+		OutputPanel.add(Cache1HitRatio);
 		
-		TextField Cach2HitRatio = new TextField();
-		Cach2HitRatio.setEditable(false);
-		Cach2HitRatio.setBounds(157, 122, 72, 22);
-		OutputPanel.add(Cach2HitRatio);
+		Cache2HitRatio = new JTextField();
+		Cache2HitRatio.setEditable(false);
+		Cache2HitRatio.setBounds(199, 126, 97, 22);
+		OutputPanel.add(Cache2HitRatio);
 		
-		TextField Cach3HitRatio = new TextField();
-		Cach3HitRatio.setEditable(false);
-		Cach3HitRatio.setBounds(235, 122, 72, 22);
-		OutputPanel.add(Cach3HitRatio);
+		Cache3HitRatio = new JTextField();
+		Cache3HitRatio.setEditable(false);
+		Cache3HitRatio.setBounds(306, 126, 97, 22);
+		OutputPanel.add(Cache3HitRatio);
 		
 		JLabel Cache1HitRatioLable = new JLabel("Cache 1");
-		Cache1HitRatioLable.setBounds(79, 102, 46, 14);
+		Cache1HitRatioLable.setBounds(92, 105, 46, 14);
 		OutputPanel.add(Cache1HitRatioLable);
 		
 		JLabel Cache2HitRatioLable = new JLabel("Cache 2");
-		Cache2HitRatioLable.setBounds(157, 102, 46, 14);
+		Cache2HitRatioLable.setBounds(196, 105, 46, 14);
 		OutputPanel.add(Cache2HitRatioLable);
 		
 		JLabel Cache3HitRatioLable = new JLabel("Cache 3");
-		Cache3HitRatioLable.setBounds(235, 102, 46, 14);
+		Cache3HitRatioLable.setBounds(306, 105, 46, 14);
 		OutputPanel.add(Cache3HitRatioLable);
 		
 		JLabel GlobalAmatLable = new JLabel("Global AMAT :");
 		GlobalAmatLable.setBounds(10, 203, 115, 14);
 		OutputPanel.add(GlobalAmatLable);
 		
-		TextField GlobalAMAT = new TextField();
+		GlobalAMAT = new JTextField();
 		GlobalAMAT.setEditable(false);
-		GlobalAMAT.setBounds(186, 195, 121, 22);
+		GlobalAMAT.setBounds(186, 195, 217, 22);
 		OutputPanel.add(GlobalAMAT);
 		
 		JLabel BranchMisspredictionLable = new JLabel("Branch Misprediction :");
-		BranchMisspredictionLable.setBounds(10, 269, 115, 14);
+		BranchMisspredictionLable.setBounds(10, 269, 170, 14);
 		OutputPanel.add(BranchMisspredictionLable);
 		
-		TextField BranchMisprediction = new TextField();
+		BranchMisprediction = new JTextField();
 		BranchMisprediction.setEditable(false);
-		BranchMisprediction.setBounds(186, 269, 121, 22);
+		BranchMisprediction.setBounds(186, 269, 217, 22);
 		OutputPanel.add(BranchMisprediction);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(100, 149, 237));
+		panel.setBounds(437, 34, 191, 330);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel R0Lable = new JLabel("R0 :");
+		R0Lable.setBounds(10, 11, 46, 14);
+		panel.add(R0Lable);
+		
+		JLabel R1Lable = new JLabel("R1 :");
+		R1Lable.setBounds(10, 36, 46, 14);
+		panel.add(R1Lable);
+		
+		JLabel R2Lable = new JLabel("R2 :");
+		R2Lable.setBounds(10, 61, 46, 14);
+		panel.add(R2Lable);
+		
+		JLabel R3Lable = new JLabel("R3 :");
+		R3Lable.setBounds(10, 86, 46, 14);
+		panel.add(R3Lable);
+		
+		JLabel R4Lable = new JLabel("R4 :");
+		R4Lable.setBounds(10, 111, 46, 14);
+		panel.add(R4Lable);
+		
+		JLabel R5Lable = new JLabel("R5 :");
+		R5Lable.setBounds(10, 136, 46, 14);
+		panel.add(R5Lable);
+		
+		JLabel R6Lable = new JLabel("R6 :");
+		R6Lable.setBounds(10, 161, 46, 14);
+		panel.add(R6Lable);
+		
+		JLabel R7Lable = new JLabel("R7 :");
+		R7Lable.setBounds(10, 186, 46, 14);
+		panel.add(R7Lable);
+		
+		R0 = new JTextField();
+		R0.setText("0");
+		R0.setEditable(false);
+		R0.setBounds(66, 8, 86, 20);
+		panel.add(R0);
+		R0.setColumns(10);
+		
+		R1 = new JTextField();
+		R1.setEditable(false);
+		R1.setColumns(10);
+		R1.setBounds(66, 33, 86, 20);
+		panel.add(R1);
+		
+		R2 = new JTextField();
+		R2.setEditable(false);
+		R2.setColumns(10);
+		R2.setBounds(66, 58, 86, 20);
+		panel.add(R2);
+		
+		R3 = new JTextField();
+		R3.setEditable(false);
+		R3.setColumns(10);
+		R3.setBounds(66, 83, 86, 20);
+		panel.add(R3);
+		
+		R4 = new JTextField();
+		R4.setEditable(false);
+		R4.setColumns(10);
+		R4.setBounds(66, 108, 86, 20);
+		panel.add(R4);
+		
+		R5 = new JTextField();
+		R5.setEditable(false);
+		R5.setColumns(10);
+		R5.setBounds(66, 133, 86, 20);
+		panel.add(R5);
+		
+		R6 = new JTextField();
+		R6.setEditable(false);
+		R6.setColumns(10);
+		R6.setBounds(66, 158, 86, 20);
+		panel.add(R6);
+		
+		R7 = new JTextField();
+		R7.setEditable(false);
+		R7.setColumns(10);
+		R7.setBounds(66, 183, 86, 20);
+		panel.add(R7);
 	}
 }
