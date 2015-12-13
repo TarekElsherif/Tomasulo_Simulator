@@ -277,18 +277,18 @@ public class Memory
 			output += memory[i];
 		}
 		
-		for (int i = 0; i < instructionMemory.length; i++)
-		{
-			output += "\nInstruction Cache Level: " + (i + 1) + ", Cache Size:" + 
-					instructionMemory[i].getSize()*2 + " Bytes, Block Size: " 
-					+ instructionMemory[i].getsizeOfBlock()*2 + " Bytes, " +
-					instructionMemory[i].getmWay() + "-way structure, Access Time: " + 
-					instructionMemory[i].getAccessDataCycles() + " Cycles, and Write Policy: " + 
-					((instructionMemory[i].getWritePolicy())? "Write Back" : "Write Through") + "\n\n";
-			
-			output += instructionMemory[i];
-			
-		}
+//		for (int i = 0; i < instructionMemory.length; i++)
+//		{
+//			output += "\nInstruction Cache Level: " + (i + 1) + ", Cache Size:" + 
+//					instructionMemory[i].getSize()*2 + " Bytes, Block Size: " 
+//					+ instructionMemory[i].getsizeOfBlock()*2 + " Bytes, " +
+//					instructionMemory[i].getmWay() + "-way structure, Access Time: " + 
+//					instructionMemory[i].getAccessDataCycles() + " Cycles, and Write Policy: " + 
+//					((instructionMemory[i].getWritePolicy())? "Write Back" : "Write Through") + "\n\n";
+//			
+//			output += instructionMemory[i];
+//			
+//		}
 		
 //		output += mainMemory;
 		
@@ -304,7 +304,7 @@ public class Memory
 		for (int i = 0; i < 8; i++)
 			instructions.add(new Instruction("LW", 0, 2, 5));
 		
-		Memory tstMem = new Memory(32, 4, 2, false, 11, 32, 4, 2, false, 22, 32, 4, 2, false, 33,
+		Memory tstMem = new Memory(2048, 8, 4, true, 10, 4096, 16, 8, false, 20, 8192, 32, 8, false, 40,
 				100, data, 80, instructions, 50);
 		
 		for (int i = 0, j  = 0; i < 32767; i++, j++)
@@ -329,102 +329,106 @@ public class Memory
 		System.out.println(tstMem.mainMemory.readByte(72));
 		System.out.println("Write Time: " + tstMem.getLatestAccessTime());
 		
-		System.out.println(tstMem);
-//		System.out.println(tstMem.readData(0));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(1));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(2));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(3));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(4));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(5));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(6));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(7));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(8));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(9));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(10));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(0));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(1));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(2));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(3));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(4));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(5));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(6));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(7));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(8));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(9));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(10));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(15));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(16));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(17));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(18));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(19));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(20));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(21));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(22));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(23));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(24));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(25));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(15));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(16));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(17));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(18));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(19));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(20));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(21));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(22));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(23));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(24));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		System.out.println(tstMem.readData(25));
-//		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
-//		tstMem.writeData(30, 99);
-//		System.out.println("Access Time Write: " + tstMem.getLatestAccessTime());
-////		System.out.println(tstMem.readData(30));
-////		System.out.println(tstMem.memory[0]);
-////		System.out.println(tstMem.memory[1]);
-////		System.out.println(tstMem.memory[2]);
-////		System.out.println(tstMem.memory.length);
 //		System.out.println(tstMem);
+		System.out.println(tstMem.readData(0));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(1));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(2));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(3));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(4));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(5));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(6));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(7));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(8));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(9));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(10));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(0));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(1));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(2));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(3));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(4));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(5));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(6));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(7));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(8));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(9));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(10));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(15));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(16));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(17));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(18));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(19));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(20));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(21));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(22));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(23));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(24));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(25));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(15));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(16));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(17));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(18));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(19));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(20));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(21));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(22));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(23));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(24));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		System.out.println(tstMem.readData(25));
+		System.out.println("Access Time: " + tstMem.getLatestAccessTime());
+		tstMem.writeData(30, 99);
+		System.out.println("Access Time Write: " + tstMem.getLatestAccessTime());
+		System.out.println("Level 1 hitRatio: " + tstMem.getDataHitRatio(1));
+		System.out.println("Level 2 hitRatio: " + tstMem.getDataHitRatio(2));
+		System.out.println("Level 3 hitRatio: " + tstMem.getDataHitRatio(3));
+		System.out.println("AMAT: " + tstMem.getAMAT());
+//		System.out.println(tstMem.readData(30));
+//		System.out.println(tstMem.memory[0]);
+//		System.out.println(tstMem.memory[1]);
+//		System.out.println(tstMem.memory[2]);
+//		System.out.println(tstMem.memory.length);
+		System.out.println(tstMem);
 	}
 }

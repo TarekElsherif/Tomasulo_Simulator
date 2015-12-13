@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class main {
@@ -32,7 +34,10 @@ public class main {
 	static int instructionBufferSize;
 	static boolean stopIssue;
 	static Parser p;
-	
+	static ArrayList<Instruction> insX ;
+	static ArrayList<Integer> data ;
+	static int ins_a ;
+	static int data_a;
 	static GUI gui;
 	// Processor Variables
 	static int PC = 0;
@@ -41,10 +46,6 @@ public class main {
 	static boolean writing;
 	static boolean committing;
 
-	static ArrayList<Integer> fuckingUselessArray = new ArrayList<Integer>(); // Instructions
-																				// input
-	static ArrayList<Instruction> fuckingUselessArray2 = new ArrayList<Instruction>(); // Instructions
-																						// input
 	static Memory memory;
 
 	static RegisterFile registerFile = new RegisterFile();
@@ -57,6 +58,15 @@ public class main {
 		gui= new GUI();
 		gui.frame.setVisible(true);
 	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
+	
 	public static void Run()
 	{
 		//System.out.println(gui.L1L.getText());
@@ -64,10 +74,11 @@ public class main {
 		p = new Parser(gui.ProgramText.getText(),gui.DataText.getText()); // Parser reads input from instructions.txt and
 		// data.txt
 		
-		ArrayList<Instruction> insX = p.getInstructions(); // Instructions input
-		ArrayList<Integer> data = p.getBytes(); // Data input
-		int ins_a = p.getInsAddress(); // Memory address of instructions
-		int data_a = p.getDataAddress(); // Memory address of data
+		insX= p.getInstructions(); // Instructions input
+		data= p.getBytes(); // Data input
+		ins_a= p.getInsAddress(); // Memory address of instructions
+		data_a = p.getDataAddress(); // Memory address of data
+		mainMemoryAccessTime=Integer.parseInt(gui.MainMemoryAccessTime.getText());
 		if(gui.L1Selected && !gui.L2Selected && !gui.L3Selected)
 		{
 			cacheLevels=1;
@@ -86,8 +97,8 @@ public class main {
 				}
 			}
 			memory=new Memory(S1, L1, M1, writePolicy1, accessTime1,
-					mainMemoryAccessTime, data, ins_a,
-					insX, data_a);
+					mainMemoryAccessTime, data, data_a,
+					insX, ins_a);
 		}else
 		{
 			if(gui.L1Selected && gui.L2Selected && !gui.L3Selected)
@@ -121,6 +132,7 @@ public class main {
 						writePolicy2=false;
 					}
 				}
+				memory=new Memory(S1, L1, M1, writePolicy1, accessTime1, S2, L2, M2, writePolicy2, accessTime2, mainMemoryAccessTime, data, data_a, insX, ins_a);
 			}else
 			{
 				if(gui.L1Selected && gui.L2Selected && gui.L3Selected)
@@ -168,6 +180,9 @@ public class main {
 							writePolicy3=false;
 						}
 					}
+					memory=new Memory(S1, L1, M1, writePolicy1, accessTime1, S2, L2, M2, writePolicy2, 
+							accessTime2,S3, L3, M3, writePolicy3, accessTime3, mainMemoryAccessTime, data, data_a, insX, ins_a);
+					
 				}
 			}
 		}
@@ -176,7 +191,6 @@ public class main {
 		registerFile.getRegister(3).setdata(3);
 		registerFile.getRegister(4).setdata(60);
 		registerFile.getRegister(5).setdata(5);
-		mainMemoryAccessTime=Integer.parseInt(gui.MainMemoryAccessTime.getText());
 		ROBsize=Integer.parseInt(gui.AvailableROB.getText());
 		LOADlatency=Integer.parseInt(gui.LoadTime.getText());
 		STORElatency=Integer.parseInt(gui.StoreTime.getText());
@@ -304,11 +318,34 @@ public class main {
 		gui.R5.setText(""+registerFile.getRegister(5).getdata());
 		gui.R6.setText(""+registerFile.getRegister(6).getdata());
 		gui.R7.setText(""+registerFile.getRegister(7).getdata());
+		gui.GlobalAMAT.setText(""+memory.getAMAT());
 		gui.TotalTime.setText(""+cycle);
 		double noi = (double) insX.size();
 		double cyc = (double) cycle;
 		double IPC = noi/cyc;
 		gui.IPC.setText(""+IPC);
+		System.out.println("------------------------------Level 1 HitRatio: " + memory.getDataHitRatio(1));
+//		System.out.println("------------------------------Level 2 HitRatio: " + memory.getDataHitRatio(2));
+//		System.out.println("------------------------------Level 3 HitRatio: " + memory.getDataHitRatio(3));
+		if(gui.L1Selected && !gui.L2Selected && !gui.L3Selected)
+		{
+			gui.Cache1HitRatio.setText(""+memory.getDataHitRatio(1));
+		}else
+		{
+			if(gui.L1Selected && gui.L2Selected && !gui.L3Selected)
+			{
+				gui.Cache1HitRatio.setText(""+memory.getDataHitRatio(1));
+				gui.Cache2HitRatio.setText(""+memory.getDataHitRatio(2));
+			}else
+			{
+				if(gui.L1Selected && gui.L2Selected && gui.L3Selected)
+				{
+					gui.Cache1HitRatio.setText(""+memory.getDataHitRatio(1));
+					gui.Cache2HitRatio.setText(""+memory.getDataHitRatio(2));
+					gui.Cache3HitRatio.setText(""+memory.getDataHitRatio(3));
+				}
+			}
+		}
 		// System.out.println(l + ": ");
 					// System.out.print("issued: " + ins[l].getIssued() + ", ");
 					// System.out.print("Executed: " + ins[l].getExecuted() + ", ");

@@ -21,6 +21,15 @@ public class Cache
 	@SuppressWarnings("unchecked")
 	public Cache(int s, int l, int m, boolean WP, int accessTime)
 	{
+		if (l == 0) {
+			System.out.println("Size Of Block (L) CAN NOT be ZERO - Cache Class");
+			return;
+		}
+		if (m == 0) {
+			System.out.println("Number Of Ways (M) CAN NOT be ZERO - Cache Class");
+			return;
+		}
+		
 		sizeOfCache = s;
 		sizeOfBlock = l;
 		mWay = m;
